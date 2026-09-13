@@ -21,7 +21,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP = os.path.join(ROOT, "知了诊所")
+# 应用本体在仓库根目录
+APP = ROOT
 
 HTML_FILES = [os.path.join(APP, "index.html")]
 JS_FILES = [

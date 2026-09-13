@@ -17,7 +17,8 @@
 set -u
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-APP="$ROOT/知了诊所"
+# 应用本体就在仓库根目录（这样任何静态托管都能直接部署，Vercel 不会再 404）
+APP="$ROOT"
 WORK="/tmp/zhiliao-verify"
 
 # ---- 找 python ----
@@ -51,9 +52,19 @@ echo "  准备测试副本（不动交付物）"
 printf '─%.0s' {1..56}; echo
 
 rm -rf "$WORK"
-mkdir -p "$WORK"
-cp -R "$APP" "$WORK/app"
-rm -rf "$WORK/app/知了诊所.app" "$WORK/app/启动知了诊所.command"
+mkdir -p "$WORK/app"
+
+# 应用本体在仓库根目录，但根目录同时还有 docs/ tools/ 提交材料/ 等非应用内容，
+# 以及 .git（可能十几 MB）。整目录 cp 再删既慢又浪费，所以用 rsync 只同步应用文件。
+# 用排除法而不是白名单：以后新增应用文件会自动带上，不用改这里。
+rsync -a \
+  --exclude='.git' --exclude='.workbuddy' --exclude='.DS_Store' \
+  --exclude='docs' --exclude='tools' --exclude='提交材料' \
+  --exclude='知了诊所.app' --exclude='启动知了诊所.command' \
+  --exclude='README.md' --exclude='LICENSE' --exclude='CLAUDE.md' \
+  --exclude='.gitignore' --exclude='*.docx' \
+  "$APP/" "$WORK/app/"
+
 cp "$ROOT/tools/drive.js" "$WORK/app/js/drive.js"
 
 "$PY" - "$WORK/app/index.html" <<'PYEOF'
