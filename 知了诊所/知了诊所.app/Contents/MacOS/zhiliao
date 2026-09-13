@@ -1,0 +1,11 @@
+#!/bin/bash
+DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+FILE="$DIR/index.html"
+URL="file://$FILE"
+if [ -d "/Applications/Google Chrome.app" ]; then
+  open -na "Google Chrome" --args --app="$URL" --window-size=1180,820
+elif [ -d "/Applications/Microsoft Edge.app" ]; then
+  open -na "Microsoft Edge" --args --app="$URL" --window-size=1180,820
+else
+  open "$URL"
+fi

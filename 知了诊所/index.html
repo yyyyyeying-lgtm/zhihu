@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知了诊所 · 你的问题，挂号了。</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- 启动兜底：脚本正常启动后会移除；启动失败时它留在页面上，说明出了什么事 -->
+<div class="boot" id="boot">
+  <div class="boot-inner">
+    <div class="boot-mark"><img class="avatar-img" src="assets/fox-avatar.png" alt="狐看山医生"></div>
+    <p class="boot-title">正在打开知了诊所…</p>
+    <p class="boot-sub">如果长时间没有反应，请确认你是<b>双击</b>打开的，而不是拖进了编辑器。</p>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark"><img class="avatar-img" src="assets/fox-avatar.png" alt="狐看山医生"></div>
+    <div>
+      <div class="brand-name">知了诊所<span class="brand-sub">AI 问题会诊</span></div>
+    </div>
+  </div>
+  <nav class="nav">
+    <button class="nav-item active" data-view="clinic">诊疗</button>
+    <button class="nav-item" data-view="records">我的病例</button>
+  </nav>
+  <div class="topbar-right">
+    <button class="icon-btn" id="btnHelp" title="怎么用">?</button>
+    <button class="icon-btn" id="btnSettings" title="设置">⚙</button>
+  </div>
+</header>
+
+<!-- ================= 主视图：诊疗 ================= -->
+<section class="view" id="view-clinic">
+  <div class="rail" id="rail">
+    <div class="rail-inner" id="railInner"></div>
+  </div>
+  <div class="wrap">
+    <div class="stream" id="stream"></div>
+  </div>
+</section>
+
+<!-- ================= 我的病例 ================= -->
+<section class="view hidden" id="view-records">
+  <div class="wrap" style="padding-top:32px">
+    <div style="display:flex;align-items:center;margin-bottom:18px">
+      <h2 style="font-size:18px;font-weight:600;flex:1">我的病例</h2>
+      <button class="btn ghost sm" id="btnNewCase">＋ 新挂号</button>
+    </div>
+    <div id="recordList"></div>
+  </div>
+</section>
+
+<!-- ================= 会诊室 ================= -->
+<div class="overlay hidden" id="roomOverlay">
+  <div class="room">
+    <div class="room-head">
+      <div class="doc-avatar" style="flex:0 0 34px;width:34px;height:34px;border-radius:10px"><img class="avatar-img" src="assets/fox-avatar.png" alt="狐看山医生"></div>
+      <div style="flex:1;min-width:0">
+        <div class="room-title">会诊室</div>
+        <div class="room-topic" id="roomTopic"></div>
+      </div>
+      <div class="room-phase" id="roomPhase">
+        <span class="phase-pill on" data-phase="1">异步证言</span>
+        <span class="phase-pill" data-phase="2">同步合议</span>
+        <span class="phase-pill" data-phase="3">结论确认</span>
+      </div>
+    </div>
+
+    <div class="room-main">
+      <div class="room-feed" id="roomFeed"></div>
+      <div class="room-side">
+        <div class="rec-title">会诊记录</div>
+        <div id="roomRec">
+          <div style="font-size:12.5px;color:var(--t3);line-height:1.7">
+            狐看山医生会在合议过程中，把共识、分歧、实证与保留意见实时打标到这里。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-foot">
+      <div class="doc-sub" id="roomStatus">等待开始</div>
+      <div class="spacer"></div>
+      <button class="btn ghost sm" id="btnSkip">跳过等待</button>
+      <button class="btn" id="btnRoomNext" disabled>进行中…</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 设置 ================= -->
+<div class="modal hidden" id="modalSettings">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">设置</div>
+      <button class="icon-btn" data-close="modalSettings">✕</button>
+    </div>
+
+    <div class="field">
+      <label>运行模式</label>
+      <div class="seg" id="modeSeg">
+        <button data-mode="demo" class="on">演示剧本（开箱可用）</button>
+        <button data-mode="ai">接入真实 AI</button>
+      </div>
+      <div class="hint" id="modeHint">使用内置的完整演示案例，不需要联网，也不需要任何配置。</div>
+    </div>
+
+    <div id="aiFields" class="hidden">
+      <div class="hr"></div>
+      <div class="field">
+        <label>服务商</label>
+        <select id="aiPreset"></select>
+        <div class="hint">选择后会自动填好接口地址与模型名，也可以选「自定义」自己填。</div>
+      </div>
+      <div class="field">
+        <label>接口地址（Base URL）</label>
+        <input type="text" id="aiBase" placeholder="https://api.deepseek.com/v1">
+      </div>
+      <div class="field">
+        <label>模型名</label>
+        <input type="text" id="aiModel" placeholder="deepseek-chat">
+      </div>
+      <div class="field">
+        <label>API Key</label>
+        <input type="password" id="aiKey" placeholder="sk-...">
+        <div class="hint">只保存在你这台电脑的浏览器本地存储里，不会上传到任何地方。</div>
+      </div>
+      <div class="field">
+        <button class="btn ghost sm" id="btnPing">测试连接</button>
+        <span id="pingResult" style="font-size:12.5px;color:var(--t3);margin-left:10px"></span>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="field">
+      <label>知乎官方数据源（可选，但很推荐）</label>
+      <label class="switch-row">
+        <input type="checkbox" id="zhihuToggle">
+        <span>接入知乎数据开放平台 —— 分歧地图会去检索<b>真实的知乎站内讨论</b>，
+        不再使用内置示例语料</span>
+      </label>
+      <div class="hint">
+        这是本项目与知乎生态最实的一层：争议检测基于真实内容，而不是模拟。<br>
+        额度：实名认证后 1000 次/天免费。AccessSecret 只存在这台电脑上。
+      </div>
+    </div>
+
+    <div id="zhihuFields" class="hidden">
+      <div class="field">
+        <label>AccessSecret</label>
+        <input type="password" id="zhihuSecret" placeholder="在 developer.zhihu.com 个人中心获取">
+        <div class="hint">
+          获取方式：访问 <b>developer.zhihu.com</b> 注册并完成实名认证，在个人中心生成。
+        </div>
+      </div>
+      <div class="field">
+        <button class="btn ghost sm" id="btnZhihuPing">测试连接</button>
+        <span id="zhihuPingResult" style="font-size:12.5px;color:var(--t3);margin-left:10px"></span>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="field">
+      <label>会诊室播放速度</label>
+      <div class="seg" id="speedSeg">
+        <button data-speed="slow">正常</button>
+        <button data-speed="fast" class="on">快（适合演示）</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="field">
+      <label>现场演示</label>
+      <label class="switch-row">
+        <input type="checkbox" id="demoToggle">
+        <span>演示模式 —— 隐藏「设置」「帮助」入口，界面更干净，适合录屏</span>
+      </label>
+      <div class="hint">只是隐藏入口，界面本身与正式版完全一致，不是另一套界面。</div>
+    </div>
+
+    <div class="field">
+      <button class="btn ghost sm" id="btnPilot">开始自动演示</button>
+      <div class="hint">
+        自动演示会替你点完整个流程，你可以专心讲解。<br>
+        快捷键：<b>P</b> 开始 / 停止自动演示　·　<b>空格</b> 暂停或跳过等待　·　<b>R</b> 一键重置　·　<b>Esc</b> 关闭浮层<br>
+        快捷键全部用单键，不需要任何浏览器插件；在输入框里打字时不会误触发。
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn ghost" id="btnClear">清空我的病例</button>
+      <button class="btn" data-close="modalSettings">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 帮助 ================= -->
+<div class="modal hidden" id="modalHelp">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">怎么用知了诊所</div>
+      <button class="icon-btn" data-close="modalHelp">✕</button>
+    </div>
+    <div class="help-hero">
+      <img src="assets/fox-doctor-bg.jpg" alt="狐看山医生">
+      <div class="help-hero-name">狐看山医生<span>知了诊所 · 主诊</span></div>
+    </div>
+    <div class="help-list">
+      <p><b>一句话：</b>把你的困惑挂个号，狐看山医生会组织几位真人来会诊，最后给你一份《会诊结论书》和一份《行动清单》。</p>
+      <p style="margin-top:14px"><b>完整流程只需要点 5 次：</b></p>
+      <ol style="margin:6px 0 0 0">
+        <li>说清你的困惑（可以直接点示例），按「挂号」</li>
+        <li>回答两个追问（每个都有快捷选项，点一下就行）</li>
+        <li>在候选病灶里选一个最像你的</li>
+        <li>按「开始会诊」，等狐看山医生主持完</li>
+        <li>按「发布到知乎」</li>
+      </ol>
+      <p style="margin-top:14px"><b>三个值得注意的地方：</b></p>
+      <ul style="margin:6px 0 0 0">
+        <li><b>三档判定</b>：如果你的问题在知乎早有定论，它会直接告诉你「不用会诊」，不会硬拉你去走流程。</li>
+        <li><b>来源计数</b>：结论书里每条共识都标了「几位参与者一致」，不虚构来源。</li>
+        <li><b>少数意见</b>：会诊中提出反对的人，他的意见会被原样保留，不会被 AI 抹平。</li>
+      </ul>
+      <p style="margin-top:14px"><b>数据存在哪：</b>你挂号过的记录只存在这台电脑的浏览器里，换电脑或清空浏览器数据会消失。可以在设置里清空。</p>
+      <p style="margin-top:14px"><b>关于演示：</b>默认使用内置案例（一位大三学生想进 AI 行业）。会诊参与者在演示模式下是模拟身份，界面已标注。想换成真实 AI 推理，去设置里填一个 API Key。</p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-close="modalHelp">知道了</button>
+    </div>
+  </div>
+</div>
+
+<!-- 演示模式下的快捷键提示条（只在演示模式开启时出现） -->
+<div class="demo-hint hidden" id="demoHint">
+  <span class="dh-dot"></span><b id="pilotState">待命</b>
+  <span class="dh-sep"></span>
+  <kbd>P</kbd> 自动演示
+  <kbd>空格</kbd> 暂停 / 跳过
+  <kbd>R</kbd> 重置
+  <kbd>Esc</kbd> 关浮层
+  <button class="dh-exit" id="btnDemoExit">退出演示</button>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/zhihu.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知了诊所 · 汇报材料</title>
+<style>
+:root{
+  --blue:#0084ff; --blue-dark:#004a99; --blue-ink:#0a5cad;
+  --blue-light:#eaf4ff; --blue-border:#cfe6ff;
+  --t1:#121212; --t2:#444; --t3:#7a8291; --t4:#a3aab5;
+  --border:#e8eaed; --border-2:#dfe2e7;
+  --bg:#f6f7f9; --card:#fff;
+  --green:#00b96b; --green-bg:#effaf4; --green-bd:#c9f0dd;
+  --amber:#ff9607; --amber-bg:#fff8ec; --amber-bd:#ffe6c2;
+  --red:#f1403c; --red-bg:#fff1f0; --red-bd:#ffd7d5;
+  --purple:#7b5cf0; --purple-bg:#f4f1ff; --purple-bd:#e2daff;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --shadow-1:0 1px 3px rgba(18,18,18,.05);
+  --shadow-2:0 4px 16px rgba(18,18,18,.07);
+  --r-s:8px; --r-m:12px; --r-l:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color:var(--t1); background:var(--bg);
+  font-size:15px; line-height:1.78; letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--blue);text-decoration:none}
+b,strong{font-weight:600;color:var(--t1)}
+
+/* ---------- 顶栏 ---------- */
+.top{
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,.92); backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.top-in{
+  max-width:1080px; margin:0 auto; padding:0 28px; height:56px;
+  display:flex; align-items:center; gap:14px;
+}
+.top-mark{
+  width:30px;height:30px;border-radius:9px;flex:0 0 30px;
+  background:linear-gradient(150deg,#0084ff,#0054b3);
+  color:#fff;font-size:15px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.top-name{font-size:15px;font-weight:600;white-space:nowrap}
+.top-sub{font-size:12.5px;color:var(--t3);padding-left:11px;border-left:1px solid var(--border-2);white-space:nowrap}
+.top-nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+.top-nav a{
+  font-size:13px;color:var(--t2);padding:5px 10px;border-radius:6px;white-space:nowrap;
+}
+.top-nav a:hover{background:var(--blue-light);color:var(--blue-dark)}
+@media(max-width:860px){
+  .top-sub{display:none}
+  .top-nav{display:none}
+}
+
+/* ---------- 布局 ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px 100px}
+@media(max-width:720px){ .wrap{padding:0 16px 72px} .top-in{padding:0 16px} }
+
+/* ---------- 封面 ---------- */
+.hero{padding:60px 0 44px;border-bottom:1px solid var(--border)}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12.5px;color:var(--blue-dark);background:var(--blue-light);
+  border:1px solid var(--blue-border);border-radius:100px;padding:4px 13px;
+  margin-bottom:20px;
+}
+.hero h1{font-size:38px;line-height:1.28;letter-spacing:-.02em;font-weight:600;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero-lead{font-size:17px;color:var(--t2);line-height:1.85;max-width:820px;margin-bottom:26px}
+.hero-meta{font-size:12.5px;color:var(--t3);display:flex;gap:18px;flex-wrap:wrap}
+@media(max-width:720px){ .hero h1{font-size:27px} .hero-lead{font-size:15.5px} }
+
+/* ---------- 关键数字条 ---------- */
+.kpis{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:34px;
+}
+@media(max-width:860px){ .kpis{grid-template-columns:repeat(2,1fr)} }
+.kpi{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-m);
+  padding:16px 16px 15px;box-shadow:var(--shadow-1);
+}
+.kpi-n{font-size:25px;font-weight:600;line-height:1.2;letter-spacing:-.02em;color:var(--blue)}
+.kpi-n.small{font-size:20px}
+.kpi-l{font-size:12.5px;color:var(--t3);margin-top:6px;line-height:1.55}
+.kpi-src{font-size:11px;color:var(--t4);margin-top:5px}
+
+/* ---------- 章节 ---------- */
+.sec{padding:52px 0 8px;border-bottom:1px solid var(--border)}
+.sec:last-of-type{border-bottom:none}
+.sec-no{
+  font-family:var(--mono);font-size:12.5px;color:var(--blue);
+  letter-spacing:.08em;margin-bottom:10px;
+}
+.sec h2{font-size:26px;line-height:1.4;font-weight:600;letter-spacing:-.015em;margin-bottom:14px}
+.sec h3{
+  font-size:17.5px;font-weight:600;margin:34px 0 12px;line-height:1.5;
+  padding-left:12px;border-left:3px solid var(--blue);
+}
+.sec h4{font-size:15.5px;font-weight:600;margin:22px 0 8px;color:var(--t1)}
+.sec p{margin-bottom:13px;color:var(--t2)}
+.sec p.lead{font-size:16px;color:var(--t1)}
+.sec ul,.sec ol{margin:0 0 14px 22px;color:var(--t2)}
+.sec li{margin-bottom:7px}
+.sec li::marker{color:var(--blue)}
+@media(max-width:720px){ .sec h2{font-size:21px} .sec h3{font-size:16.5px} }
+
+/* 一句话结论 */
+.take{
+  background:var(--blue-light);border:1px solid var(--blue-border);
+  border-radius:var(--r-m);padding:15px 18px;margin:18px 0 4px;
+  font-size:15px;color:var(--blue-dark);line-height:1.8;
+}
+.take b{color:var(--blue-dark);font-weight:600}
+.take .tk{
+  font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  background:#fff;color:var(--blue);border-radius:5px;padding:2px 8px;
+  margin-right:9px;white-space:nowrap;
+}
+
+/* ---------- 卡片与网格 ---------- */
+.grid{display:grid;gap:12px;margin:18px 0}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:860px){ .g3,.g4{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:620px){ .g2,.g3,.g4{grid-template-columns:1fr} }
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-m);
+  padding:16px 17px;box-shadow:var(--shadow-1);
+}
+.card-t{font-size:14px;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.card-d{font-size:13.5px;color:var(--t2);line-height:1.75}
+.card-n{font-size:23px;font-weight:600;color:var(--blue);letter-spacing:-.02em;line-height:1.25;margin-bottom:5px}
+.dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px;display:inline-block}
+.dot.r{background:var(--red)} .dot.g{background:var(--green)}
+.dot.a{background:var(--amber)} .dot.b{background:var(--blue)}
+.dot.p{background:var(--purple)} .dot.gray{background:#c2c8d0}
+
+/* 强调块 */
+.note{
+  border-radius:var(--r-m);padding:14px 17px;margin:16px 0;
+  font-size:14px;line-height:1.78;
+  border:1px solid var(--border-2);background:#fafbfc;color:var(--t2);
+}
+.note.warn{background:var(--amber-bg);border-color:var(--amber-bd);color:#8a5a10}
+.note.ok{background:var(--green-bg);border-color:var(--green-bd);color:#0a6e45}
+.note.bad{background:var(--red-bg);border-color:var(--red-bd);color:#a32723}
+.note.info{background:var(--blue-light);border-color:var(--blue-border);color:var(--blue-dark)}
+.note b{color:inherit;font-weight:600}
+.note .nt{font-size:11.5px;font-weight:600;letter-spacing:.06em;opacity:.75;display:block;margin-bottom:4px}
+
+/* ---------- 表格 ---------- */
+.tw{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card)}
+th,td{padding:10px 13px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.65}
+th{
+  font-size:12.5px;font-weight:600;color:var(--t3);
+  background:#fafbfc;white-space:nowrap;border-bottom:1px solid var(--border-2);
+}
+tr:last-child td{border-bottom:none}
+td.num{font-family:var(--mono);font-size:13px;white-space:nowrap;text-align:right}
+td.hi{color:var(--blue);font-weight:600}
+.up{color:var(--red)}      /* 中国习惯：红涨 */
+.down{color:var(--green)}  /* 绿跌 */
+.pill{
+  display:inline-block;font-size:11.5px;font-weight:500;
+  padding:2px 8px;border-radius:5px;white-space:nowrap;
+}
+.pill.ok{background:var(--green-bg);color:#0a7a4a;border:1px solid var(--green-bd)}
+.pill.warn{background:var(--amber-bg);color:#96601a;border:1px solid var(--amber-bd)}
+.pill.bad{background:var(--red-bg);color:#a32723;border:1px solid var(--red-bd)}
+.pill.info{background:var(--blue-light);color:var(--blue-dark);border:1px solid var(--blue-border)}
+.pill.plain{background:#f2f3f5;color:#5a6472;border:1px solid #e4e6ea}
+
+/* 付费方案对比表：前两列不允许折行，否则「A · 单次加急」会被拆开 */
+table.pm td:first-child,
+table.pm td:nth-child(3){white-space:nowrap}
+
+/* ---------- 条形图 ---------- */
+.bars{margin:18px 0}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:9px;flex-wrap:wrap}
+.bar-label{flex:0 0 176px;font-size:13px;color:var(--t2);text-align:right;line-height:1.4}
+.bar-track{flex:1 1 160px;height:22px;background:#f0f2f5;border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;background:var(--blue);transition:width .6s}
+.bar-fill.dim{background:#c3d7ee}
+.bar-fill.gr{background:var(--green)}
+.bar-fill.am{background:var(--amber)}
+.bar-fill.rd{background:var(--red)}
+.bar-val{flex:0 0 88px;font-family:var(--mono);font-size:12.5px;color:var(--t2)}
+@media(max-width:720px){
+  /* 窄屏：标签独占一行，条形与数值另起一行，避免标签被压缩折行 */
+  .bar-row{gap:6px 10px;margin-bottom:14px}
+  .bar-label{flex:1 1 100%;text-align:left;font-size:12.5px}
+  .bar-track{flex:1 1 auto;height:20px}
+  .bar-val{flex:0 0 auto;font-size:12px}
+}
+
+/* ---------- 流程图 ---------- */
+.flow{margin:22px 0}
+.flow-row{
+  display:flex;align-items:stretch;gap:0;flex-wrap:wrap;
+}
+.step{
+  flex:1 1 0;min-width:0;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-m);padding:14px 13px;position:relative;
+  margin-right:22px;margin-bottom:12px;
+}
+.step:last-child{margin-right:0}
+.step::after{
+  content:'';position:absolute;right:-16px;top:50%;transform:translateY(-50%);
+  width:0;height:0;border-left:8px solid var(--blue-border);
+  border-top:6px solid transparent;border-bottom:6px solid transparent;
+}
+.step:last-child::after{display:none}
+.step-k{
+  font-family:var(--mono);font-size:11px;color:var(--blue);
+  letter-spacing:.06em;margin-bottom:5px;
+}
+.step-t{font-size:14px;font-weight:600;margin-bottom:5px}
+.step-d{font-size:12.5px;color:var(--t3);line-height:1.65}
+.step.click{background:#fff;border-color:var(--blue);border-width:1.5px}
+.step.click .step-k{color:var(--blue-dark)}
+.step.click::after{border-left-color:var(--blue)}
+.step.click .step-t::after{
+  content:'· 点击';font-size:10.5px;color:var(--blue);
+  font-weight:400;margin-left:5px;
+}
+@media(max-width:860px){
+  .flow-row{flex-direction:column}
+  .step{margin-right:0;margin-bottom:22px}
+  .step::after{
+    right:auto;left:26px;top:auto;bottom:-16px;transform:none;
+    border-left:6px solid transparent;border-right:6px solid transparent;
+    border-top:8px solid var(--blue-border);border-bottom:0;
+  }
+  .step.click::after{
+    border-left-color:transparent;border-right-color:transparent;
+    border-top-color:var(--blue);
+  }
+}
+
+/* ---------- 品牌/角色块 ---------- */
+.fox{
+  display:flex;gap:14px;align-items:flex-start;
+  background:linear-gradient(120deg,#eef7ff,#f8fbff);
+  border:1px solid var(--blue-border);border-radius:var(--r-l);
+  padding:16px 18px;margin:20px 0;
+}
+.fox-mark{
+  width:48px;height:48px;flex:0 0 48px;border-radius:13px;
+  background:linear-gradient(150deg,#0084ff,#0054b3);
+  color:#fff;font-size:21px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.fox-t{font-size:14.5px;font-weight:600;margin-bottom:4px}
+.fox-d{font-size:13.5px;color:var(--t2);line-height:1.75}
+
+/* 引用 */
+.quote{
+  border-left:3px solid var(--blue-border);padding:3px 0 3px 17px;
+  margin:18px 0;font-size:14.5px;color:var(--t2);line-height:1.8;
+}
+.quote .who{display:block;font-size:12.5px;color:var(--t3);margin-top:7px}
+
+/* 来源标注 */
+.src{
+  font-size:11.5px;color:var(--t4);margin-top:-6px;margin-bottom:16px;
+  line-height:1.65;
+}
+.src code{
+  font-family:var(--mono);font-size:11px;
+  background:#f2f3f5;padding:1px 5px;border-radius:4px;color:var(--t3);
+}
+
+/* 页脚 */
+.foot{
+  margin-top:52px;padding-top:24px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--t3);line-height:1.85;
+}
+.foot h4{font-size:13px;color:var(--t2);margin:16px 0 7px}
+.foot ul{margin-left:18px;font-size:12.5px}
+/* 长网址必须允许任意位置断行，否则窄屏会被撑破 */
+.foot .url{
+  font-family:var(--mono);font-size:11.5px;color:var(--t2);
+  word-break:break-all;overflow-wrap:anywhere;
+}
+
+/* 打印 */
+@media print{
+  /* 必须显式声明，否则 Chrome 打印时会丢掉所有背景色，
+     提示块、结论块、标注标签会全部变成白底，层次就没了 */
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:11.5pt}
+  .top{display:none}
+  .wrap{max-width:none;padding:0}
+  .sec{page-break-inside:avoid;padding:26px 0 6px}
+  .hero{padding:0 0 22px}
+  .card,.note,.take,.step,.fox{box-shadow:none}
+  .step::after{display:none}
+  .step{margin-right:12px}
+  /* 表格不要被跨页切断 */
+  table{page-break-inside:auto}
+  tr{page-break-inside:avoid}
+  h2,h3,h4{page-break-after:avoid}
+  a{color:var(--t1)}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="top-mark">知</div>
+    <div class="top-name">知了诊所</div>
+    <div class="top-sub">汇报材料 · 2026</div>
+    <nav class="top-nav">
+      <a href="#s1">① 为什么做</a>
+      <a href="#s2">② 场景与规模</a>
+      <a href="#s3">③ 产品与路径</a>
+      <a href="#s4">④ 商业价值</a>
+      <a href="#s5">⑤ 付费模式</a>
+      <a href="#s6">附：口径说明</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============ 封面 ============ -->
+<div class="hero">
+  <div class="hero-tag">知乎黑客松 2026 · 校园新锐季 ｜ 知识炼金场</div>
+  <h1>知乎不缺答案，<em>缺的是把你的处境接上答案的那座桥</em></h1>
+  <p class="hero-lead">
+    十年积累下 9.5 亿条内容，足以回答几乎任何一个问题。
+    但一个 23 岁的应届生打开「我该不该转行」时，看到的是一千个互相矛盾的答案，
+    没有一个是「在他这个处境下」的结论。<br><br>
+    <b>知了诊所做的事：让 AI 组织一次真实的会诊，让人与人之间已有的答案收敛成一份面向具体处境的结论。</b>
+    AI 不上台答题，AI 负责把对的人请到一张桌子上。
+  </p>
+  <div class="hero-meta">
+    <span>材料版本 v1.0</span>
+    <span>2026-09-12</span>
+    <span>可运行 Demo 已上线</span>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi">
+      <div class="kpi-n">9.54<span style="font-size:15px">亿条</span></div>
+      <div class="kpi-l">知乎累计内容量</div>
+      <div class="kpi-src">2025 年报 · 同比 +9.1%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-n">45.6<span style="font-size:15px">%</span></div>
+      <div class="kpi-l">知乎问题「零回答」的占比</div>
+      <div class="kpi-src">第三方抽样 · 1000 个问题页</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-n">1270<span style="font-size:15px">万</span></div>
+      <div class="kpi-l">2026 届高校毕业生规模</div>
+      <div class="kpi-src">教育部 · 同比 +48 万</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-n">36.2<span style="font-size:15px">%</span></div>
+      <div class="kpi-l">未拿 offer 的毕业生，归因「不清楚自己适合什么」</div>
+      <div class="kpi-src">智联招聘就业力调研 · 连续多年居首</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 一 ============ -->
+<section class="sec" id="s1">
+  <div class="sec-no">01 / 为什么做这个</div>
+  <h2>知乎面对的不是「内容不够」，是「内容与处境之间没有桥」</h2>
+
+  <div class="take">
+    <span class="tk">一句话</span>
+    知乎的核心资产是<b>真实的人的专业判断</b>，而不是内容的数量。
+    但在 AI 时代，这个资产正在被两头夹击：一边是 AI 直接给答案，
+    一边是抖音小红书切走日常提问。知了诊所守的是中间那块最难被替代的地方——
+    <b>需要结合个人处境、需要真人负责的那类决策</b>。
+  </div>
+
+  <h3>1.1 先说清楚知乎现在的真实处境</h3>
+  <p>这不是我们的揣测，是财报上的数字。以下全部来自知乎 2025 财年年报（截至 2025-12-31）：</p>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th>指标</th><th>2025 年</th><th>2024 年</th><th>变化</th><th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>总收入</td><td class="num">27.49 亿元</td><td class="num">35.99 亿元</td>
+          <td class="num down">−23.6%</td>
+          <td>连续收缩</td>
+        </tr>
+        <tr>
+          <td>付费会员收入</td><td class="num">15.39 亿元</td><td class="num">17.62 亿元</td>
+          <td class="num down">−12.7%</td>
+          <td><b>最大的收入来源，占 56.0%，但正在下滑</b></td>
+        </tr>
+        <tr>
+          <td>营销服务收入</td><td class="num">11.7 亿元</td><td class="num">—</td>
+          <td class="num">—</td>
+          <td>占 30.7%，在主动优化客户结构</td>
+        </tr>
+        <tr>
+          <td>平均月订阅会员</td><td class="num">1350 万</td><td class="num">1500 万</td>
+          <td class="num down">−10.0%</td>
+          <td>人数在减少</td>
+        </tr>
+        <tr>
+          <td>净利润</td><td class="num">−1.95 亿元</td><td class="num">−1.69 亿元</td>
+          <td class="num down">亏损扩大</td>
+          <td>经调整口径首次全年盈利（+0.38 亿元）</td>
+        </tr>
+        <tr>
+          <td>累计内容量</td><td class="num">9.54 亿条</td><td class="num">—</td>
+          <td class="num up">+9.1%</td>
+          <td>内容还在涨</td>
+        </tr>
+        <tr>
+          <td>累计内容创作者</td><td class="num">8030 万</td><td class="num">—</td>
+          <td class="num up">+3.3%</td>
+          <td>增速低于内容量增速</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="src">
+    数据来源：知乎 2025 财年业绩公告（港交所 2026-03-25 披露）、知乎 2025 Q4 财报。
+    付费会员占比按人民币口径计算（15.389 / 27.490 = 56.0%）。
+  </div>
+
+  <h4>这张表里藏着三个必须正视的信号</h4>
+
+  <div class="grid g3">
+    <div class="card">
+      <div class="card-t"><span class="dot r"></span>信号一 · 收入靠会员，会员在流失</div>
+      <div class="card-d">
+        付费会员贡献了 56% 的收入，是命脉。但它同比 −12.7%，
+        人数从 1500 万掉到 1350 万（−10%）。
+        也就是说，<b>知乎现在最需要的是「新理由让人掏钱」</b>——
+        而不是把现有的付费墙加高。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot a"></span>信号二 · 内容在涨，使用效率没跟上</div>
+      <div class="card-d">
+        内容量 +9.1% 到 9.54 亿条，创作者 +3.3%。
+        <b>内容的增速快于创作者的增速</b>，说明增长主要来自存量创作者的更多产出。
+        对用户来说，这意味着「要读的更多了，但找到对自己有用的那一条没有变容易」。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>信号三 · 用户结构决定了机会在哪</div>
+      <div class="card-d">
+        73.2% 的活跃用户在 30 岁以下，女性占 59.6%，
+        DAU 日均使用时长 41 分钟以上。
+        <b>知乎的核心用户，正是职业与人生选择最密集、最焦虑的那群人</b>——
+        这是一个巨大的错配机会，也是本产品的立足点。
+      </div>
+    </div>
+  </div>
+
+  <h3>1.2 一个更少被提到、但更根本的问题：回答的两端都在失衡</h3>
+
+  <p>
+    上面讲的是收入与用户结构。但知乎真正的问题，藏在<b>「提问」与「回答」之间的关系</b>里。
+    公开数据指向一个很少有人正视的事实——
+  </p>
+
+  <div class="note bad">
+    <span class="nt">第三方抽样统计（非官方数据，请注意年份与口径）</span>
+    有人对知乎随机抽取 1000 个问题页做过统计：<br>
+    <b>45.6% 的问题，回答数是 0</b>；<br>
+    <b>78.7% 的问题，回答数不足 3 个</b>；<br>
+    而回答数在 50 个以上的「热门问题」，占比<b>不到 1%</b>。<br>
+    <span style="font-size:12.5px;opacity:.8">
+    来源：第三方抽样分析（1000 个问题页随机取样）。这是民间统计，不是知乎官方口径，
+    且数据有一定年份，仅用于说明方向性。
+    </span>
+  </div>
+
+  <p>把这两个数字放在一起看，会发现知乎面对的是一个<b>双向的问题</b>：</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-t"><span class="dot r"></span>一端：大量提问，没有人回答</div>
+      <div class="card-d">
+        45.6% 的问题零回答。这不是「问题太冷门」，而是
+        <b>提问者和能回答的人之间没有通路</b>——
+        一个普通用户的提问，要穿过层层入口才能被潜在回答者看见，
+        而等他被看见时，提问的人往往已经离开了。<br><br>
+        <b>后果</b>：提问这件事在知乎的回报太低，愿意认真提问的人会越来越少。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot a"></span>另一端：少数热门问题，答案多到无法收敛</div>
+      <div class="card-d">
+        不到 1% 的问题集中了大量回答。而一个真实困惑（「我该不该转行」）
+        会同时命中几十个热门问题、上百个高赞回答，
+        <b>每一篇都有道理，但没有一篇针对提问者本人的处境</b>。<br><br>
+        <b>后果</b>：用户拿到了「很多信息」，但没有拿到「一个判断」。
+      </div>
+    </div>
+  </div>
+
+  <div class="note info">
+    <span class="nt">这两端失衡是同一个原因造成的</span>
+    知乎的内容分发是按<b>「问题」</b>组织的，而用户的困惑是按<b>「处境」</b>组织的。
+    同一个人问「我该不该转行」，背后可能是 30 岁有房贷、可能是应届生、
+    可能是刚被裁员——这是三个完全不同的问题，却会被导向同一批回答。<br>
+    <b>知了诊所切入点就在这个错位上：先搞清「你是谁、你的处境是什么」，再去调度内容与真人。</b>
+  </div>
+
+  <h4>还有一条：AI 生成内容正在让「真人回答」变得更稀缺</h4>
+  <p>
+    这不是推测，是知乎自己在 ESG 报告里披露的数字：2025 年知乎
+    <b>日均拦截违规 AI 内容 1.6 万条</b>，同时处置了 38.7 万个违规作弊账户。
+    当一个社区的提问有近一半没人回答、而回答里又有大量是机器批量生产的时候，
+    <b>「有一个真实的人，认真为你的问题负责」这件事本身就成了稀缺品。</b>
+  </p>
+  <p>而知乎官方在 2025 年中期业绩公告里的表述，几乎就是本产品的立项理由：</p>
+
+  <div class="quote">
+    「愈发明显的是，由真人创作的<b>真实、专业且有深度的内容对于缓解人工智能幻觉至关重要</b>。
+    这正是知乎 14 年来一直着力培养的差异化优势。」
+    <span class="who">—— 知乎 2025 年中期业绩公告（2025-08-27）</span>
+  </div>
+
+  <h3>1.3 三个正在同时发生的挤压</h3>
+
+  <h4>挤压一：AI 抢走了「知识获取」的第一入口</h4>
+  <p>
+    过去问「怎么学 Python」，第一反应是搜知乎。现在是问 AI。这个迁移已经完成，
+    而且不可逆——知乎自己的动作也承认了这一点：核心产品「知乎直答」2025 Q3 社区渗透率超过 15%，
+    约为去年同期的 4 倍，月活突破千万。
+  </p>
+  <p>
+    但这里有个关键判断：<b>AI 搜索解决的是「知识」，不是「决定」。</b>
+    当问题变成「我 32 岁、有房贷、非科班，现在转 AI 值不值」，
+    AI 给的答案越标准，越没用。真人的、带具体处境的、有人愿意为它负责的回答，反而更稀缺。
+  </p>
+
+  <div class="quote">
+    「真人生成内容的价值在于<b>信任</b>，这是 AI 时代的『硬通货』。」
+    <span class="who">—— 知乎创始人兼 CEO 周源，2025 Q2 财报电话会</span>
+  </div>
+
+  <p>这句话本身就是知了诊所的产品定义。我们的设计前提是：<b>AI 越强，真人判断越值钱。</b></p>
+
+  <h4>挤压二：抖音、小红书正在切走「普通人的日常提问」</h4>
+  <ul>
+    <li><b>抖音</b>在搜索页内嵌「提问」功能，基于 7 亿日活解决「刷到什么问什么」的即时需求。</li>
+    <li><b>小红书</b>超过 70% 月活用户使用搜索，日均搜索约 6 次，「问一问」基于站内真人经验笔记做 AI 总结。</li>
+  </ul>
+  <p>
+    这两家抢的不是知乎的存量用户，而是<b>增量市场</b>。它们的优势是流量和即时性，
+    短板也很清楚：<b>给不出「有人为这个判断负责」的答案</b>。
+    知乎要守的阵地，恰恰是「需要人负责」的那部分问题。
+  </p>
+
+  <h4>挤压三：付费会员的内容在漂移</h4>
+  <p>
+    知乎的付费会员目前主要由盐言故事（短篇/小说）生态支撑，并延伸到有声书、
+    广播剧与 IP 改编。这是一条被验证过的变现路径，但它与知乎「专业讨论社区」的核心身份
+    是<b>两件事</b>。
+  </p>
+  <div class="note warn">
+    <span class="nt">需要正视</span>
+    用户为「看好故事」付费，和用户为「搞清楚自己的问题」付费，是两种完全不同的心智。
+    前者可以靠内容库规模留住人，后者必须靠<b>关系与信任</b>。
+    知乎目前在后一种场景里，<b>没有一款原生的付费产品</b>——
+    这是知了诊所想填的位。
+  </div>
+
+  <h3>1.4 所以问题的准确表述是</h3>
+
+  <div class="note bad">
+    <span class="nt">知乎的真实困境</span>
+    <b>拥有最多「人的答案」，但用户拿不到「针对自己处境的答案」。</b><br>
+    一个人真正要的不是「1200 个回答」，而是「在这 1200 个回答里，考虑到我这个情况，
+    哪一条更适合我、为什么、下一步做什么」。这个「收敛」动作，现在没人做：
+    AI 直接生成会幻觉且不可追责；社区靠用户自己翻，翻到放弃；
+    官方圆桌需要运营人工策划，一场以周计。
+  </div>
+
+  <p>知了诊所把这个动作产品化了。它的定位因此可以一句话讲清：</p>
+
+  <div class="fox">
+    <div class="fox-mark">知</div>
+    <div>
+      <div class="fox-t">产品定位</div>
+      <div class="fox-d">
+        一个<b>由 AI 组织、由真人负责</b>的知识收敛服务。<br>
+        用户提出一个具体困惑 → AI 检测知乎存量讨论的收敛程度 →
+        分歧真实的才请人开一场会诊 → 产出面向本人处境的结论与行动清单。<br>
+        <b>AI 不替代人回答，AI 组织人对人负责。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3>1.5 与知乎生态的契合点（这一层是硬证据，不是话术）</h3>
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>用知乎的方式解决知乎的问题</div>
+      <div class="card-d">
+        产品不生产新知识，它<b>消费知乎已有的答案</b>，
+        把散落在多篇回答里的观点聚成「观点簇」，检出真实分歧，
+        再把分歧交给真人讨论。内容资产越厚，产品越好用——
+        这与知乎的资产是<b>正相关</b>，而不是竞争关系。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>接口层已经接上知乎官方平台</div>
+      <div class="card-d">
+        已接入知乎数据开放平台（developer.zhihu.com）的<b>站内搜索接口</b>，
+        分歧地图检索的是真实站内讨论，包含标题、赞同数、作者、
+        <b>权威等级</b>。这不是演示用的假数据。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>为创作者降低产出门槛</div>
+      <div class="card-d">
+        会诊结束后，每位参与者自动获得一篇以他为主署名的《会诊手记》，
+        内容由他自己在会诊中的发言重组而成，<b>不需要额外写作</b>。
+        一次参与 = 一篇内容。这是对「创作者供给」的直接补充。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>产出回流社区</div>
+      <div class="card-d">
+        公开的《会诊结论书》带共同署名与来源计数，可一键复制回知乎发布，
+        成为新的社区内容。私密的《行动清单》留给用户自己。
+        <b>一公开一私密，同时解决「内容从哪来」和「用户为什么留下」。</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 二 ============ -->
+<section class="sec" id="s2">
+  <div class="sec-no">02 / 场景 · 痛点 · 规模</div>
+  <h2>痛点不在「找不到信息」，在「信息太多、命运太具体」</h2>
+
+  <div class="take">
+    <span class="tk">一句话</span>
+    2026 届毕业生 1270 万，全年求职大军超 1500 万，有效校招岗位约 567 万——接近 3 个人抢 1 个岗位。
+    但更值得注意的不是人数，是<b>他们卡在哪里</b>：未拿 offer 的毕业生中，
+    <b>36.2% 归因于「不清楚自身适配方向」，连续多年居首，远超「求职渠道有限」「院校背景不足」</b>。
+    也就是说，<b>挡住他们的不是信息，是判断标准</b>——
+    而知了诊所处理的正是「判断」这一类问题。
+  </div>
+
+  <h3>2.1 具体场景：这是一个什么样的时刻</h3>
+
+  <div class="fox">
+    <div class="fox-mark">案</div>
+    <div>
+      <div class="fox-t">典型案例（本产品演示用真实场景）</div>
+      <div class="fox-d">
+        一个普通本科在读生，想问「我这样还能进 AI 行业吗」。<br>
+        他在知乎搜到 1200 多个回答：有人说学历是硬门槛、有人说项目经历能翻盘、
+        有人说趁早考研、有人说直接工作积累经验更快。<br>
+        <b>每一条都有道理，每一条都不针对他。</b>
+        他真正的问题不是「有没有机会」，而是「我是不是已经晚了」——
+        这是焦虑，不是信息缺失。<b>而焦虑，是搜索框回答不了的。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3>2.2 痛点的量化：三个数字撑住这个场景</h3>
+
+  <div class="grid g3">
+    <div class="card">
+      <div class="card-n">1270 万</div>
+      <div class="card-t">2026 届高校毕业生</div>
+      <div class="card-d">
+        同比增加 48 万，<b>连续第 8 年突破千万</b>。
+        硕士研究生规模从 2017 年的 52 万增至 111 万，增幅 113.5%——
+        高学历供给在快速扩张，校招需求没有同步扩张。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n">≈ 3 : 1</div>
+      <div class="card-t">求职者与岗位之比</div>
+      <div class="card-d">
+        叠加往届未就业、海归回流、考公考研失利者，全年求职大军超 1500 万；
+        而面向应届生的有效校招岗位仅约 567 万个。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n">17.9%</div>
+      <div class="card-t">16–24 岁城镇青年失业率</div>
+      <div class="card-d">
+        2026 年 7 月数据（不含在校生）。
+        同期 AI 相关岗位需供比达 3.08，
+        <b>一边招不到人，一边找不到工作</b>——这是结构错配，不是不够努力。
+      </div>
+    </div>
+  </div>
+  <div class="src">
+    数据来源：教育部 2026 届毕业生规模公告；2026 年 7 月国家统计局城镇调查失业率；
+    公开媒体报道汇总（2026-09）。求职大军总量为媒体汇总口径，非官方单一口径。
+  </div>
+
+  <h4>更值得注意的：学历与回报的关系正在倒挂</h4>
+  <div class="bars">
+    <div class="bar-row">
+      <span class="bar-label">大专</span>
+      <div class="bar-track"><div class="bar-fill gr" style="width:56.6%"></div></div>
+      <span class="bar-val">56.6%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">本科</span>
+      <div class="bar-track"><div class="bar-fill" style="width:45.4%"></div></div>
+      <span class="bar-val">45.4%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">硕博</span>
+      <div class="bar-track"><div class="bar-fill dim" style="width:44.4%"></div></div>
+      <span class="bar-val">44.4%</span>
+    </div>
+  </div>
+  <div class="src">2024 届毕业生获得录用通知（offer）的比例。来源：公开就业数据汇总。</div>
+
+  <p>
+    这组数字的社会含义是：<b>「按学历排序」这条旧路径正在失效</b>。
+    考研报名人数从 2023 年峰值 474 万降到 2026 年 343 万，缩水 131 万，出现三连降。
+    年轻人不再相信「再读三年就好了」。
+  </p>
+  <p>
+    当标准答案失效时，人会转向什么？<b>转向「和我情况类似的人是怎么选的」。</b>
+    这正是知了诊所提供的价值形态——不是给你一个通用结论，
+    而是把「和你处境相近的真人判断」组织到你面前。
+  </p>
+
+  <h3>2.3 有多少人存在这个困惑</h3>
+  <p>我们把这个问题拆成两层：<b>全国有多少人在这个决策场景里</b>，以及<b>其中有多少人已经在知乎</b>。</p>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>层次</th><th>口径</th><th>规模</th><th>依据</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>全国 · 年度求职决策人群</td>
+          <td>应届 + 往届未就业 + 海归 + 职场再就业</td>
+          <td class="num hi">1500 万+ / 年</td>
+          <td>教育部与媒体汇总</td>
+        </tr>
+        <tr>
+          <td>全国 · 在校生存量</td>
+          <td>普通高校在校生总量（含研究生）</td>
+          <td class="num">4000 万+</td>
+          <td>教育部统计公报</td>
+        </tr>
+        <tr>
+          <td>知乎 · 30 岁以下活跃用户</td>
+          <td>知乎活跃用户 × 73.2%</td>
+          <td class="num">估算区间见下</td>
+          <td>2025 年报用户结构</td>
+        </tr>
+        <tr>
+          <td><b>知乎 · 求职/转行困惑分群</b></td>
+          <td>18–30 岁且处于职业决策期</td>
+          <td class="num hi"><b>约 1500 万–2500 万</b></td>
+          <td>本产品内部推算，见下</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="nt">推算过程（请按估算读，不要当测量值）</span>
+    知乎 2025 年报<b>未披露具体 MAU 数字</b>，仅说明「月活跃用户群体保持稳定」「MAU 连续 4 个季度环比稳定」。
+    公开报道的历史区间约为 8000 万–1 亿。按 8000 万保守取值：<br>
+    8000 万 × 73.2%（30 岁以下）≈ <b>5856 万</b>；<br>
+    其中处于职业决策期（应届、毕业 3 年内、转行意向）的比例，参照「毕业 3 年内大学生」调研样本的
+    职业困惑普遍性（73% 对当前工作不满意、81% 表示不快乐），保守取 25%–40% →
+    <b>约 1460 万–2340 万</b>。<br>
+    <b>这是内部推演，用于判断量级与优先级，不作为对外引用的实测数据。</b>
+  </div>
+
+  <h4>关键结论：知乎的用户结构，与这个痛点人群高度重合</h4>
+  <div class="note ok">
+    <span class="nt">这是本产品最扎实的一条外部依据</span>
+    知乎 73.2% 的活跃用户在 30 岁以下，且「主要聚焦学习与成长」（财报原文），
+    18–30 岁占比超过 65%。这两句话指向的是同一群人：
+    <b>正在做人生第一批重要决定、最需要靠谱判断、也最不愿意被 AI 敷衍的那群人。</b>
+    产品要做的不是去别处找人，是把知乎已经在服务的这群人，服务得更深一层。
+  </div>
+
+  <h3>2.4 需求侧的证据：人们明确说了「这类问题要问人」</h3>
+  <p>
+    这是知了诊所最重要的外部假设检验。全球多份调研指向同一个结论——<b>在需要个人相关性
+    和高信任的场景里，AI 的效用急剧下降</b>：
+  </p>
+
+  <div class="bars">
+    <div class="bar-row">
+      <span class="bar-label">某些问题只有人能回答</span>
+      <div class="bar-track"><div class="bar-fill gr" style="width:78%"></div></div>
+      <span class="bar-val">78%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">AI 无法完全理解情感与语境</span>
+      <div class="bar-track"><div class="bar-fill gr" style="width:75%"></div></div>
+      <span class="bar-val">75%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">会继续寻求人的意见</span>
+      <div class="bar-track"><div class="bar-fill" style="width:68%"></div></div>
+      <span class="bar-val">68%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">更信任人产内容</span>
+      <div class="bar-track"><div class="bar-fill" style="width:53%"></div></div>
+      <span class="bar-val">53%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">信任 AI 做消费决策</span>
+      <div class="bar-track"><div class="bar-fill rd" style="width:36%"></div></div>
+      <span class="bar-val">36%</span>
+    </div>
+  </div>
+  <div class="src">
+    来源：Reddit Business 全球消费者调研（2025-06），样本 2340 人，覆盖美 / 英 / 澳 / 加。
+    该项调研同时表明：<b>55% 认为 AI 给的建议「太笼统、没有人情味」</b>，
+    这是 AI 在咨询类场景失分的首要原因。
+  </div>
+
+  <div class="grid g3" style="margin-top:22px">
+    <div class="card">
+      <div class="card-n" style="font-size:20px">−50%</div>
+      <div class="card-d">
+        只要读者<b>怀疑</b>内容是 AI 生成的，信任度就下降近 50%，
+        52% 会完全脱离该内容。<br>
+        <span style="font-size:12px;color:var(--t4)">Raptive，n=3000，2025-08</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n" style="font-size:20px">86%</div>
+      <div class="card-d">
+        不完全信任 AI 给出的结果；
+        42% 明确表示原因是<b>答案没有标明来源</b>。<br>
+        <span style="font-size:12px;color:var(--t4)">Talker Research / WordPress VIP，n=1200</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n" style="font-size:20px">仅 7%</div>
+      <div class="card-d">
+        看到明显的 AI 生成内容后<b>会更信任</b>品牌；
+        31% 反而更不信任，91% 要求披露。<br>
+        <span style="font-size:12px;color:var(--t4)">Klaviyo / Datalily，n=8000，8 国，2026-05</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note info">
+    <span class="nt">这三条数据直接决定了产品设计原则</span>
+    既然「疑似 AI 生成」本身就会损伤信任，那么本产品就把这条风险<b>变成设计约束</b>：<br>
+    ① 会诊参与者是<b>真人身份</b>，AI 只做组织与编排，不上台答题；<br>
+    ② 结论书里每一条共识都标注<b>来源计数</b>（如「3/4 位参与者一致」），可追溯；<br>
+    ③ 少数意见<b>独立成块保留</b>，不被 AI 抹平；<br>
+    ④ 每张推理卡都标注<b>数据来源</b>：真实 AI 推理 / 内置示例 / 已降级。<br>
+    <b>不假装比实际更真</b>，是这类产品的底线，也是它最难被复制的地方。
+  </div>
+
+  <h3>2.5 客群画像：具体为谁做</h3>
+
+  <p>
+    前面讲的是「有多少人在这个场景里」。但规模大不等于产品成立——
+    必须说清楚<b>是哪一种人，卡在哪一个具体的点上</b>。
+    下面这一层有调查数据支撑。
+  </p>
+
+  <div class="note ok">
+    <span class="nt">最关键的一条证据：毕业生找不到工作，第一位原因不是缺信息</span>
+    智联招聘《大学生就业力调研报告》显示：未拿到录用通知的毕业生中，
+    <b>超三成（36.2%）将原因归结为「过度迷茫，不清楚自身适配方向」</b>。<br>
+    而这个原因<b>已连续多年高居首位，远超「求职渠道有限」「院校背景不足」</b>。<br><br>
+    这句话值得反复读：挡住这些人的<b>不是信息不够，而是不知道自己适合什么</b>。
+    而这正是知了诊所处理的问题类型。
+  </div>
+
+  <h4>核心客群 · 有具体处境、但缺判断标准的人</h4>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>维度</th><th>画像</th><th>数据依据</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>是谁</td>
+          <td>在校生（大三至研究生）、毕业 3 年内的职场新人、准备转行的在职者。<br>
+              <b>共同特征：正面临一个影响后续数年、但自己判断不了的选择。</b></td>
+          <td>与知乎用户结构重合：73.2% 活跃用户在 30 岁以下</td>
+        </tr>
+        <tr>
+          <td>卡在哪</td>
+          <td><b>「不是没有选择，而是不知道哪个选择适合自己。」</b><br>
+              信息渠道、岗位信息都可以补，唯独「我的兴趣、能力、长短板在哪」这一步，
+              大部分人答不上来。</td>
+          <td>职业咨询师一线观察（见下引原文）</td>
+        </tr>
+        <tr>
+          <td>问得最多的问题</td>
+          <td>① 考研还是就业（咨询占比 <b>超四成</b>）<br>
+              ② 考公还是入职企业（约 <b>25%</b>）<br>
+              ③ 出国留学还是国内发展</td>
+          <td>职场咨询机构咨询数据</td>
+        </tr>
+        <tr>
+          <td>信息获取现状</td>
+          <td>以校内渠道和同辈经验为主，<b>企业直接信息获取率仅 22%</b>；
+              <b>超七成不了解行业核心能力要求</b>。</td>
+          <td>高校职业规划调研，n=460，2025-12</td>
+        </tr>
+        <tr>
+          <td>心态与行动</td>
+          <td><b>66% 迷茫但愿探索</b>，但只有不足 20% 目标明确且积极行动；
+              <b>70% 仅偶尔思考职业方向</b>，缺乏系统规划习惯。</td>
+          <td>同上</td>
+        </tr>
+        <tr>
+          <td>最关键的一点</td>
+          <td>他们<b>不是不愿意行动</b>——90% 的学生希望增加校友分享、
+              行业体验这类实践性内容。<b>缺的是把「想做」变成「知道往哪做」的那一步。</b></td>
+          <td>同上</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quote">
+    「他们迷茫的不是『我有哪些选择』，而是<b>『众多选择里，哪一个真正适合自己』</b>。<br>
+    当下年轻人普遍不缺信息，<b>缺少的是独立判断的标准</b>；没有清晰的评判逻辑，
+    海量信息只会徒增焦虑。」<br>
+    「并非信息匮乏，而是<b>自我认知模糊</b>。」
+    <span class="who">—— 一位职场咨询博主对一线咨询数据的总结</span>
+  </div>
+
+  <div class="note info">
+    <span class="nt">这段引文其实就是知了诊所的产品说明书</span>
+    如果用户缺的是「信息」，那产品应该做搜索、做摘要——那是知乎直答的活。<br>
+    但数据说用户缺的是<b>「针对我的判断标准」</b>。
+    判断标准无法被检索，它只能来自<b>有过相似处境的人的亲身经验，
+    以及他们之间发生的真实讨论</b>。<br>
+    这就是为什么本产品不做「AI 生成答案」，而做「AI 组织人来讨论」。
+  </div>
+
+  <h4>供给端客群 · 有专业积累、但缺产出的时间</h4>
+  <div class="grid g3">
+    <div class="card">
+      <div class="card-n" style="font-size:20px">8030 万</div>
+      <div class="card-d">
+        知乎累计内容创作者。<br>
+        其中<b>中腰部创作者</b>是知乎自己在财报里点名的重点——
+        「AI 工具的提升进一步显著降低中腰部创作者的创作门槛」。<br>
+        <span style="font-size:12px;color:var(--t4)">2025 年报 / ESG 报告</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n" style="font-size:20px">超 70%</div>
+      <div class="card-d">
+        高等级创作者的<b>收益渗透率</b>。
+        说明这个群体的变现意愿与通路已经被验证，
+        缺的不是「愿不愿意赚」，而是「有没有更省力的产出方式」。<br>
+        <span style="font-size:12px;color:var(--t4)">知乎 2025 年度 ESG 报告</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n" style="font-size:20px">+200%</div>
+      <div class="card-d">
+        创作者通过用户赞赏获得的收益规模同比增幅；
+        版权收入作者规模同比增长 <b>6 倍</b>。<br>
+        <b>创作者的收益敏感度在上升</b>——
+        这让「一次参与 = 一篇内容」的交换变得更有吸引力。<br>
+        <span style="font-size:12px;color:var(--t4)">同上</span>
+      </div>
+    </div>
+  </div>
+  <p>
+    供给端的真实处境是：<b>他能答，但写一篇值得发的内容需要数小时到数天。</b>
+    而知了诊所让他用「一段证言 + 15 分钟合议」换到一篇可署名内容——
+    这是明确的时间交易，不是人情请求。
+  </p>
+
+  <h3>2.6 需求是怎么被解决的：痛点 → 机制 → 有效性依据</h3>
+
+  <p>
+    这一节回答「这个需求是如何解决的」。
+    每一行都必须能被追问：<b>你凭什么认为这样就能解决？</b> 所以最后一列给了外部依据。
+  </p>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th>用户的真实痛点</th>
+          <th>知了诊所的机制</th>
+          <th>为什么这样能解决</th>
+          <th>外部依据</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>信息过载，无法收敛</b><br>
+              一个问题命中几十上百个高赞回答，每篇都有道理</td>
+          <td><b>分歧地图</b>：把散落的观点聚成观点簇，
+              标出分歧程度，再给出三档判定</td>
+          <td>把「一片信息」压成「几个观点簇 + 一个结论」。
+              用户需要的是收敛，不是更多内容</td>
+          <td>只有 36% 的人信任 AI 做决策类判断；
+              55% 认为 AI 建议「太笼统、没人情味」</td>
+        </tr>
+        <tr>
+          <td><b>缺判断标准</b><br>
+              「不知道哪个适合我」</td>
+          <td><b>会诊</b>：由处境相似或观点对立的真人，
+              针对本人具体情况给出结论</td>
+          <td>判断标准不能被检索，只能来自有过相似处境的人的亲身经验。
+              这正是数据的结论：第一位原因是「迷茫」而非「缺渠道」</td>
+          <td>36.2% 未拿 offer 的毕业生归因于
+              「不清楚自身适配方向」，<b>连续多年居首</b></td>
+        </tr>
+        <tr>
+          <td><b>不敢问「蠢问题」</b><br>
+              怕暴露自己的浅薄，索性不问</td>
+          <td><b>挂号式的低门槛入口</b>：AI 先替他把功课做一遍
+              （检索、聚类、形成病灶假设），他只需要点选确认</td>
+          <td>把「提问」的心理成本降到接近零。
+              用户不需要组织语言，只需要承认自己困惑</td>
+          <td>45.6% 的知乎问题零回答——
+              提问的回报太低，正在抑制提问行为本身</td>
+        </tr>
+        <tr>
+          <td><b>找不到「和我情况类似的人」</b></td>
+          <td><b>按处境匹配参与者</b>（不是按兴趣、不是按粉丝量），
+              邀请标准是「他的经历与这个病灶相关」</td>
+          <td>处境相似者的经验才可迁移。
+              用户要的不是「厉害的人」，是「和我像的人后来怎么样了」</td>
+          <td>90% 的学生希望增加<b>校友分享 / 行业体验</b>类实践性内容；
+              企业直接信息获取率仅 22%</td>
+        </tr>
+        <tr>
+          <td><b>知道了很多，但不知道做什么</b></td>
+          <td><b>行动清单 + 真实回访日期</b>：按月分解的可勾选步骤，
+              结案时生成 3 个月后的复查约定</td>
+          <td>把「知道」变成「做到」。
+              同时让用户离开时带着一个回来的理由</td>
+          <td>「行动力薄弱」占学生困境的 30%；
+              74.36% 毕业生已把「先就业再择业」作为缓冲</td>
+        </tr>
+        <tr>
+          <td><b>内容产出成本高</b>（供给端）</td>
+          <td><b>会诊手记</b>：由他本人在会诊中的发言自动重组，
+              不新增任何事实</td>
+          <td>一次参与 = 一篇内容。
+              产出成本从「数小时写作」降到「一段证言 + 15 分钟」</td>
+          <td>高等级创作者收益渗透率超 70%；
+              赞赏收益同比增超 200%，收益动机已被验证</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note warn">
+    <span class="nt">反过来说：哪些人不是我们的客群</span>
+    一个产品不说清「不服务谁」，它的定位就是模糊的。以下几类明确不用：<br>
+    · <b>只要事实的人</b>（「Python 怎么安装」）——这类问题已有定论，直答或搜索更快；<br>
+    · <b>想找人替自己做决定的人</b>——产品给的是判断依据与行动建议，不代做决定；<br>
+    · <b>需要专业资质的问题</b>（医疗诊断、法律意见、投资建议）——需专项合规评审，本期不开放；<br>
+    · <b>追求即时答案的人</b>——会诊需要时间，异步证言阶段就要 48 小时。
+    <b>愿意为一个判断等两天，是本产品的用户门槛，也是它的品质门槛。</b>
+  </div>
+</section>
+
+<!-- ============ 三 ============ -->
+<section class="sec" id="s3">
+  <div class="sec-no">03 / 产品形态与功能路径</div>
+  <h2>同一份代码，手机和电脑都能用；从提问到拿到结论，只要 5 次点击</h2>
+
+  <div class="take">
+    <span class="tk">一句话</span>
+    它不是一个「功能更多的社区」，而是一条<b>被压缩到极致的单流程</b>：
+    没有多级页面、不需要「返回」、不需要学任何操作。
+    设计目标只有一个——让一个正在焦虑的人，
+    <b>在 3 分钟内拿到一份能直接执行的结论</b>。
+  </div>
+
+  <h3>3.1 形态：一套代码，两端可用</h3>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>网页端 / 桌面端</div>
+      <div class="card-d">
+        纯静态网页应用，浏览器打开即用。
+        <b>零安装、零配置、零依赖</b>——只有 7 个文件，
+        没有任何第三方库、没有构建步骤。
+        这意味着它可以部署到任意静态托管，也意味着评委不需要为了体验它装任何东西。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>手机端</div>
+      <div class="card-d">
+        <b>同一份代码</b>，已适配至 375px（iPhone 宽度）：
+        首屏与会诊室均无横向溢出，挂号按钮在窄屏下变为整行全宽，
+        会诊室改为单栏结构。桌面端布局保持不变（逐像素比对确认零差异）。
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="nt">为什么坚持「同一套代码」而不是做两个端</span>
+    演示型产品最怕的是「手机上看起来是另一个东西」。
+    我们选择让响应式在 CSS 层完成——<b>信息结构、交互逻辑、产出结果完全一致</b>，
+    这样在路演现场切换设备时，讲的还是同一件事。
+  </div>
+
+  <h3>3.2 功能路径：六个阶段，五次点击，一条流</h3>
+  <p>
+    全部交互长在<b>同一条对话流</b>里，像聊天一样向下生长。顶部有一条细进度轨提示走到哪一步——
+    它<b>只显示、不可点</b>，所以流程中永远不会出现「返回」这个动作。
+  </p>
+
+  <div class="flow">
+    <div class="flow-row">
+      <div class="step click">
+        <div class="step-k">第 1 步</div>
+        <div class="step-t">说出困惑</div>
+        <div class="step-d">填一句话，或点一个示例。不想打字也行。</div>
+      </div>
+      <div class="step click">
+        <div class="step-k">第 2 步</div>
+        <div class="step-t">挂号</div>
+        <div class="step-d">生成挂号单，进入问诊。</div>
+      </div>
+      <div class="step">
+        <div class="step-k">第 3 步</div>
+        <div class="step-t">问诊</div>
+        <div class="step-d">AI 追问 2 轮，每个问题都配好快捷选项，<b>可以零输入通过</b>。</div>
+      </div>
+      <div class="step click">
+        <div class="step-k">第 4 步</div>
+        <div class="step-t">确认病灶</div>
+        <div class="step-d">AI 给 2–3 个候选假设 + 可能性排序，<b>由用户点选</b>，AI 不替他下结论。</div>
+      </div>
+      <div class="step click">
+        <div class="step-k">第 5 步</div>
+        <div class="step-t">看判定</div>
+        <div class="step-d">生成分歧地图，给出三档判定之一，<b>流程从此分叉</b>。</div>
+      </div>
+      <div class="step click">
+        <div class="step-k">第 6 步</div>
+        <div class="step-t">拿结论</div>
+        <div class="step-d">按判定分支产出结论书 / 行动清单，可一键复制带走。</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>3.3 支撑痛点的第一个机制：三档判定（产品会主动劝退）</h3>
+  <p>
+    这是本产品最反直觉的设计。<b>它不会对所有问题都启动会诊</b>——
+    会先检测知乎存量讨论的收敛程度，再决定要不要请人：
+  </p>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>判定</th><th>触发条件</th><th>产品行为</th><th>为什么这样设计</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill ok">已确诊</span></td>
+          <td>高质量回答高度一致，无实质分歧</td>
+          <td>直接给共识结论，<b>不请人、不召开会诊</b></td>
+          <td>产品主动说「这个问题不用我」</td>
+        </tr>
+        <tr>
+          <td><span class="pill warn">存在真实分歧</span></td>
+          <td>检出 2 个以上观点簇，且各有支撑</td>
+          <td>触发会诊：异步证言 → 同步合议 → 结论书</td>
+          <td><b>这才是产品的高价值场景</b></td>
+        </tr>
+        <tr>
+          <td><span class="pill plain">信息不足</span></td>
+          <td>存量内容稀疏或时效过期</td>
+          <td>不给结论，给一份<b>可复制的提问草稿</b>，把人交还社区</td>
+          <td>把流量还给社区，而不是硬凑一个答案</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note ok">
+    <span class="nt">为什么这一条是产品可信度的支点</span>
+    所有 AI 产品都在争取用户多用，而<b>知了诊所会主动告诉用户「你不该用我」</b>。
+    这既是对「AI 幻觉」的正面回应，也让「存在真实分歧」这个判定结果变得可信——
+    因为另外两种结果会真的发生。<br>
+    <b>一个永远说「有分歧、需要会诊」的产品，等于没有判定能力。</b>
+  </div>
+
+  <h3>3.4 支撑痛点的第二个机制：会诊室与结论书</h3>
+  <p>只有「存在真实分歧」的问题才会走到这里。会诊分三个阶段，解决「专家凑不齐时间」这个现实约束：</p>
+
+  <div class="grid g3">
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>阶段一 · 异步证言（48 小时窗口）</div>
+      <div class="card-d">
+        每位参与者独立录制一段真实经历，<b>互不影响</b>。
+        这一步避免了「第一个发言的人定调」。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>阶段二 · 同步合议（15 分钟）</div>
+      <div class="card-d">
+        狐看山医生主持，AI 负责编排与追问，点名要求对立方正面回应。
+        过程自动形成<b>共识 / 分歧 / 证据</b>三类会诊记录。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>阶段三 · 结论确认（24 小时）</div>
+      <div class="card-d">
+        参与者确认引用自己发言的部分。有异议的<b>单独保留为「少数意见」</b>，
+        不参与共识，也不被删除。
+      </div>
+    </div>
+  </div>
+
+  <h4>产出：两样东西，一公开一私密</h4>
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>《会诊结论书》—— 公开</div>
+      <div class="card-d">
+        带共同署名、来源计数（如「3/4 位参与者一致」）、
+        少数意见独立区块、存留分歧。
+        <b>可一键复制为 Markdown 回知乎发布</b>，成为新的社区内容。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot p"></span>《行动清单》—— 私密</div>
+      <div class="card-d">
+        只属于用户本人：按月分解的可勾选步骤、真实回访日期。
+        勾选进度会写回「我的病例」，
+        <b>同时也是 3 个月后把用户召回的理由</b>。
+      </div>
+    </div>
+  </div>
+
+  <h3>3.5 支撑痛点的第三个机制：让供给端愿意来</h3>
+  <p>
+    这是双边产品最容易空转的一环：<b>如果创作者不来，患者再急也没用。</b>
+    一个真实的 30+ 创作者，凭什么接受一封陌生学生的会诊邀请？
+  </p>
+  <p>
+    答案是把会诊从「帮个忙」重新定义为<b>「创作者成本更低的产出入口」</b>——
+    邀请函上写的不是「一位学生需要你」，而是
+    「你在某个话题下的这篇回答被 47 人收藏，有一位读者针对它提了三个你原文没覆盖的问题」。
+  </p>
+
+  <div class="note info">
+    <span class="nt">供给端闭环的直接证据：一次参与 = 一篇内容</span>
+    会诊结束后，每位参与者自动获得一篇<b>以他为主署名</b>的《会诊手记》，
+    内容由他自己在会诊中的发言重组而成，标着
+    「整理自 证言 1 分 48 秒 · 合议发言 2 处，未新增任何事实」。<br>
+    <b>他一个字都不用写。</b>一场会诊 4 位参与者 = 4 篇新内容 + 1 份公开结论书 = 5 件内容产出。
+    同时，私密保留了意见的参与者，他的「少数意见」会变成他最有辨识度的一篇内容——
+    <b>把「异议保留」从一条价值观，变成一个看得见的好处。</b>
+  </div>
+
+  <h3>3.6 一套可复现的质量保障机制</h3>
+  <p>
+    「AI 组织真人讨论」这类产品最大的质疑是「你怎么知道它真的在按规则跑」。
+    所以本产品把质量做成了<b>可自动验证</b>的东西：
+  </p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>一条命令跑完全部验证</div>
+      <div class="card-d">
+        静态检查（元素引用交叉核对）+ 21 个阶段自动截图 +
+        <b>81 项 DOM 断言</b>，覆盖三条判定分支、演示能力、
+        真实 AI 容错、判定是否真的驱动了流程、375px 手机布局。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>诚实性写在界面上</div>
+      <div class="card-d">
+        每张推理卡都标注数据来源（<b>真实 AI 推理 / 内置示例 / 已降级</b>）；
+        真实 AI 调用失败时，界面会说明<b>失败在哪一步、什么原因</b>，
+        而不是悄悄换成示例数据。调用失败绝不会静默。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 四 ============ -->
+<section class="sec" id="s4">
+  <div class="sec-no">04 / 商业价值</div>
+  <h2>它同时是一件「内容生产工具」和一件「付费产品」</h2>
+
+  <div class="take">
+    <span class="tk">一句话</span>
+    知了诊所对知乎的商业价值分两条线：
+    <b>内容侧</b>——用极低成本生产高质量、可署名、可回流的社区内容（供给端效率）；
+    <b>收入侧</b>——提供一个与知乎核心资产一致、高单价、高毛利的新付费场景，
+    填补「付费会员在下滑、而会员内容正在从专业讨论漂移」这个缺口。
+  </div>
+
+  <h3>4.1 拉新（用户增长）</h3>
+
+  <div class="grid g3">
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>钩子一：结论书是可分享的物料</div>
+      <div class="card-d">
+        《会诊结论书》天然带署名、带来源、带一句有辨识度的结论。
+        它是一个<b>「有人在知乎上认真回答了我的问题」</b>的证明——
+        这类内容在社交平台上的转发意愿，远高于一篇普通回答。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>钩子二：结论书回流即拉新</div>
+      <div class="card-d">
+        结论书复制回知乎发布时，附带的会诊记录会指向参与者主页与原始问题。
+        <b>每一位参与会诊的创作者，都在为自己的关注者播一次种。</b>
+        4 位参与者 = 4 个私域出口。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot b"></span>钩子三：提问草稿是「回社区」的入口</div>
+      <div class="card-d">
+        信息不足分支不把用户丢走，而是给一份<b>已经写好的提问草稿</b>
+        （含背景、诉求、颗粒度）与「为什么这样问更容易得到回答」的要点。
+        这不是流失，是把一个模糊提问者变成高质量提问者。
+      </div>
+    </div>
+  </div>
+
+  <h4>拉新口径的建议（不要用 DAU 衡量它）</h4>
+  <div class="tw">
+    <table>
+      <thead><tr><th>环节</th><th>可观测指标</th><th>为什么用它</th></tr></thead>
+      <tbody>
+        <tr><td>入口</td><td>挂号人数</td><td>真正表达困惑的人，比进入页面的人更接近价值</td></tr>
+        <tr><td>激活</td><td><b>结案率</b>（走完流程 / 挂号人数）</td><td>衡量流程是否足够短、是否让人愿意走完</td></tr>
+        <tr><td>传播</td><td>结论书分享率、复制率</td><td>这是产品自带的传播动作，可直接计数</td></tr>
+        <tr><td>回流</td><td>结论书在知乎的发布数、被赞数</td><td>衡量它是否真的成了社区内容，而不只是自嗨</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>4.2 促活与留存</h3>
+
+  <div class="note ok">
+    <span class="nt">本产品在留存上有一个天然优势：它天生埋了一个「未来的约会」</span>
+    《行动清单》里有按月的执行步骤，结案时会生成一个<b>真实的回访日期</b>——
+    「3 个月后带着项目进展回来，我们复查一次」。<br>
+    这意味着<b>用户离开时就带着一个回来的理由</b>。
+    对内容社区来说，这种「因为我的事还没做完所以我回来」的召回，
+    比推送通知有效得多，也体面得多。
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-t"><span class="dot p"></span>促活 · 三个可测的行为增量</div>
+      <div class="card-d">
+        <b>① 深度阅读</b>：分歧地图要求用户看观点簇与来源，这是有目的的阅读，
+        不是刷信息流。<br>
+        <b>② 提交行为</b>：从「只看不写」到「说出自己的困惑」，
+        这是社区最难的转化之一。<br>
+        <b>③ 二次访问</b>：回访提醒 + 清单勾选进度，制造复数次打开。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot p"></span>留存 · 为什么它比内容消费更黏</div>
+      <div class="card-d">
+        内容消费的黏性来自「还有更多想看」；
+        而这里的行为数据是<b>用户自己的病历、自己的执行进度</b>。
+        用户在平台上留下的是「我做过什么」，不是「我看过什么」。
+        <b>沉没成本变成了留存。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3>4.3 内容侧价值：这是最容易被低估的一条</h3>
+  <p>对内容平台来说，比拉新更贵的是<b>持续拿到好内容</b>。知了诊所在这方面的效率是很直接的：</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>产出物</th><th>数量</th><th>谁写的</th><th>可回流社区</th></tr></thead>
+      <tbody>
+        <tr><td>《会诊结论书》</td><td>1 份</td><td>AI 整理 + 4 位参与者确认</td><td><span class="pill ok">是</span> 公开、带共同署名</td></tr>
+        <tr><td>《会诊手记》</td><td>4 篇</td><td>各自本人的发言重组</td><td><span class="pill ok">是</span> 发在各自主页</td></tr>
+        <tr><td>《行动清单》</td><td>1 份</td><td>AI 生成，私密</td><td><span class="pill plain">否</span> 只属于委托人</td></tr>
+        <tr><td><b>合计</b></td><td><b>6 件</b></td><td>—</td><td><b>5 件可回流</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note info">
+    <span class="nt">关键效率对比</span>
+    一场会诊，创作者投入的是<b>一段证言 + 15 分钟合议</b>，
+    产出的是<b>一篇可署名的内容</b>。而常规路径下，写一篇同等质量的长文，
+    需要数小时到数天。<br>
+    对平台来说，这意味着<b>内容供给的边际成本被大幅压低</b>，
+    而且产出的内容是「对话式、有多方观点、带分歧」的——
+    这正是 AI 最不容易替代、也最有社区辨识度的一类内容。
+  </div>
+
+  <h3>4.4 这些指标能不能完成？要诚实地说</h3>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>目标</th><th>判断</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>内容供给效率提升</td>
+          <td><span class="pill ok">能完成</span></td>
+          <td>这不是预测，是机制本身的性质：手记由已有发言重组，边际成本接近于零</td>
+        </tr>
+        <tr>
+          <td>提升单用户的停留与提交行为</td>
+          <td><span class="pill ok">大概率能</span></td>
+          <td>流程本身要求用户表达自己的处境，天然比浏览行为的参与度高</td>
+        </tr>
+        <tr>
+          <td>付费转化</td>
+          <td><span class="pill warn">需要实测</span></td>
+          <td>下面是市场依据，但本产品自己的转化率必须靠真实投放与 A/B 验证，不能推断</td>
+        </tr>
+        <tr>
+          <td>大规模拉新</td>
+          <td><span class="pill bad">诚实说不靠它</span></td>
+          <td>会诊是重决策、高成本路径，<b>它天生不是流量产品</b>。
+              它拉的是「高质量提问者」和「愿署名创作者」，不是总量。
+              <b>把它当增长引擎会失望；把它当留存与供给引擎，它很强。</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note warn">
+    <span class="nt">必须提前说清的成本约束</span>
+    会诊需要请真人，这是本产品唯一的重成本项。
+    因此它的<b>单位经济模型对「一场会诊需要多少位参与者」极其敏感</b>。
+    本产品的设计选择是：<b>用三档判定把会诊的触发率压下来</b>——
+    只有真正存在分歧的问题才请人，
+    已确诊与信息不足这两类（大概率是多数）不产生真人成本。
+    这个比例本身，就是产品最重要的经营指标。
+  </div>
+</section>
+
+<!-- ============ 五 ============ -->
+<section class="sec" id="s5">
+  <div class="sec-no">05 / 付费模式</div>
+  <h2>免费的部分足够有用，付费的部分解决「等不了」和「想指定人」</h2>
+
+  <div class="take">
+    <span class="tk">一句话</span>
+    付费设计遵循一条原则：<b>不给出结论设置门槛</b>。
+    判断和结论永远免费——因为「把话说清楚」是社区信任的基础。
+    付费买的是<b>时间和确定性</b>：更快、由谁来做、以及做完之后有人持续跟。
+  </div>
+
+  <h3>5.1 免费与付费的分界</h3>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>能力</th><th>免费</th><th>付费</th><th>设计理由</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>挂号 / 问诊 / 病灶确认</td>
+          <td><span class="pill ok">✓ 免费</span></td>
+          <td>—</td>
+          <td>入口必须无摩擦，否则没有流量</td>
+        </tr>
+        <tr>
+          <td>分歧地图 + 三档判定</td>
+          <td><span class="pill ok">✓ 免费</span></td>
+          <td>—</td>
+          <td><b>判定结果免费，是为了让「不用会诊」这件事真的能被说出来</b></td>
+        </tr>
+        <tr>
+          <td>《会诊结论书》</td>
+          <td><span class="pill ok">✓ 免费</span></td>
+          <td>—</td>
+          <td>它是公开资产，收费会杀死它的传播价值</td>
+        </tr>
+        <tr>
+          <td>《行动清单》</td>
+          <td><span class="pill ok">✓ 免费</span></td>
+          <td>—</td>
+          <td>用户自己的东西，不应设墙</td>
+        </tr>
+        <tr>
+          <td>会诊排队</td>
+          <td>标准队列（异步 48h）</td>
+          <td><span class="pill info">加急</span></td>
+          <td>时间敏感的人愿意为「快」付费</td>
+        </tr>
+        <tr>
+          <td>参与专家</td>
+          <td>系统匹配</td>
+          <td><span class="pill info">专家号</span></td>
+          <td>指定某位高权威等级创作者，这是最自然的付费点</td>
+        </tr>
+        <tr>
+          <td>复诊 / 长期跟踪</td>
+          <td>单次</td>
+          <td><span class="pill info">订阅</span></td>
+          <td>把一次性交易变成关系</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.2 市场依据：这类付费是已经被验证的</h3>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-n">86.4%</div>
+      <div class="card-d">
+        受访青年有过知识付费经历。<br>
+        <span style="font-size:12px;color:var(--t4)">中国青年报社社会调查中心，n=1334</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n">380 元</div>
+      <div class="card-d">
+        知识付费用户年均消费支出（2026 年），复购率超 65%。<br>
+        <span style="font-size:12px;color:var(--t4)">行业报告汇总</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n">+32%</div>
+      <div class="card-d">
+        <b>专家响应度高时，问答形式的参与率提升约 32%。</b>
+        这是「会诊」这种形态最直接的市场支撑。<br>
+        <span style="font-size:12px;color:var(--t4)">全球在线付费知识市场研究，2025</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-n">54%</div>
+      <div class="card-d">
+        付费学习者看重<b>「专家社区的独家访问权与指导功能」</b>；
+        46% 更偏好提供社区讨论与专家反馈的平台。<br>
+        <span style="font-size:12px;color:var(--t4)">同上</span>
+      </div>
+    </div>
+  </div>
+  <div class="src">
+    补充：全球在线付费知识市场 2025 年约 745 亿美元，其中「专业能力与职业培训」占 44.8%，
+    预计 2026–2032 年复合增长率 15.5%。中国知识付费市场 2024 年已突破 1200 亿元
+    （各机构口径差异较大，艾媒广义口径 2025 年预计 2808.8 亿元）。
+  </div>
+
+  <h3>5.3 可采取的付费模式（五个方案对比）</h3>
+
+  <div class="tw">
+    <table class="pm">
+      <thead>
+        <tr><th>模式</th><th>形态</th><th>定价参考</th><th>优势</th><th>风险</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>A · 单次加急</b></td>
+          <td>整场会诊加急，缩短排队</td>
+          <td>¥19–39 / 次</td>
+          <td>转化门槛最低，决策简单，不改变产品结构</td>
+          <td>客单价低，需要量</td>
+        </tr>
+        <tr>
+          <td><b>B · 专家号</b><br><span class="pill ok">推荐主推</span></td>
+          <td>指定某位高权威等级参与者，或指定领域</td>
+          <td>¥99–299 / 次</td>
+          <td><b>与知乎已有付费咨询心智一致</b>；专家能分成，供给端有动力；客单价高</td>
+          <td>需要专家供给先起来（冷启动）</td>
+        </tr>
+        <tr>
+          <td><b>C · 订阅制</b></td>
+          <td>月度/年度：不限次会诊 + 复诊 + 病历长期跟踪</td>
+          <td>¥19/月 或 ¥168/年</td>
+          <td>经常性收入，缓解付费会员数下滑；把用户关系变成长期</td>
+          <td>复购依赖使用频次，而困惑是低频的</td>
+        </tr>
+        <tr>
+          <td><b>D · 机构号</b><br><span class="pill ok">B 端</span></td>
+          <td>企业/律所/医院/教育机构作为会诊供给方，或为团队做「认知体检」</td>
+          <td>年费制</td>
+          <td><b>知乎已有机构号体系与 B 端收入</b>；规模化不依赖 C 端转化</td>
+          <td>销售周期长，不属于黑客松周期能验证的范围</td>
+        </tr>
+        <tr>
+          <td><b>E · 内容分成</b></td>
+          <td>结论书 / 手记进入盐选，按阅读分成</td>
+          <td>—</td>
+          <td>与现有会员体系打通，不新增付费决策</td>
+          <td>与「结论书应免费公开」的原则冲突</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.4 推荐路径：先 B，再 A，C 留给时间</h3>
+
+  <div class="fox">
+    <div class="fox-mark">荐</div>
+    <div>
+      <div class="fox-t">分阶段推进</div>
+      <div class="fox-d">
+        <b>第一阶段（可与现有体系并行）：专家号（B）。</b>
+        这是最不冒险的选择——它把知乎已有的「付费咨询」心智，
+        从「一对一问答」升级为「一对多会诊」，
+        <b>同样的专家、同样的付费意愿、更高的内容产出</b>。
+        而且专家参与有分成，供给端动机是内生的，不需要额外补贴。<br><br>
+        <b>第二阶段：加急（A）。</b>
+        在会诊量起来之后，用加急做价格分层。它不需要新供给，只是重新分配队列。<br><br>
+        <b>第三阶段：订阅（C）。</b>
+        只有当一个用户平均一年会发起 2 次以上困惑时才成立。
+        <b>在频次被验证之前，不要做订阅</b>——那是把自己锁进一个复购不成立的模型里。
+      </div>
+    </div>
+  </div>
+
+  <h3>5.5 如何引导用户付费（不破坏信任的做法）</h3>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-t"><span class="dot g"></span>该做的</div>
+      <div class="card-d">
+        ① <b>在结论上不设墙，只在交付速度与人员上设墙</b>——
+        用户看完免费的结论再决定要不要加急，不会觉得被威胁。<br>
+        ② <b>把付费点放在「等待」这个真实痛点最尖锐的时刻</b>：
+        会诊已确定要开、正在排队等专家的那一刻，是转化率最高的位置。<br>
+        ③ <b>让专家可见</b>：显示参与者是谁、权威等级、过去参与过几场。
+        28% 的付费犹豫来自「对陌生的讲师缺乏信任」——
+        把供给方透明化，直接解决这个障碍。<br>
+        ④ 提供<b>试用或灵活退款</b>（31% 的用户期望这一点）。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><span class="dot r"></span>不该做的</div>
+      <div class="card-d">
+        ① <b>不要在结论上设付费墙</b>。这个产品的全部价值建立在信任上，
+        在结论处收钱，等于告诉用户「你需要先付钱才知道值不值」。<br>
+        ② <b>不要用限时倒计时、稀缺性话术</b>。
+        面对一个正在焦虑的人使用这类手段，短期多赚一点，
+        长期会毁掉「认真回答问题」的全部气质。<br>
+        ③ <b>不要为「已确诊」的问题收费</b>。
+        那类问题不该走会诊，也不该产生任何费用——
+        这是产品诚实性的一部分。
+      </div>
+    </div>
+  </div>
+
+  <h3>5.6 与知乎现有收入的关系</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>收入项</th><th>现状</th><th>知了诊所的位置</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>付费会员</td>
+          <td>15.39 亿元，占 56%，同比 −12.7%，会员数 −10%</td>
+          <td><b>补位而非替代</b>：提供与专业讨论资产一致的新付费理由</td>
+        </tr>
+        <tr>
+          <td>营销服务</td>
+          <td>11.7 亿元，占 30.7%</td>
+          <td>不直接相关；但会诊场景天然适合「机构号」这类高价值广告主</td>
+        </tr>
+        <tr>
+          <td>付费咨询 / 值乎类</td>
+          <td>已有，但形式是「一对一问答」</td>
+          <td><b>升级路径</b>：一对多会诊，同样供给，产出多 5 倍内容</td>
+        </tr>
+        <tr>
+          <td>内容 IP 变现</td>
+          <td>盐言故事改编短剧 / 漫剧</td>
+          <td>不冲突；会诊内容可成为新的 IP 素材来源</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note info">
+    <span class="nt">一句话总结商业逻辑</span>
+    知乎最值钱的东西是「有人愿意为判断负责」。<br>
+    知了诊所的第一层价值是<b>把这件事规模化</b>（AI 组织，人负责）；<br>
+    第二层价值是<b>把这件事变成可以定价的商品</b>（专家号、加急、订阅）；<br>
+    第三层价值是<b>它自己生产内容</b>（一场会诊 5 件可回流内容）。<br>
+    三层加在一起，它既是一项业务，也是一条内容供给管线。
+  </div>
+</section>
+
+<!-- ============ 附 ============ -->
+<section class="sec" id="s6">
+  <div class="sec-no">附 / 口径与边界说明</div>
+  <h2>哪些是实测、哪些是估算、哪些还没做</h2>
+
+  <p>
+    这份材料里同时存在三类信息，混在一起读会失真，所以单独列清楚。
+    一个愿意把边界写明白的方案，比一个听起来什么都能做的方案更值得信任。
+  </p>
+
+  <h3>数据来源分级</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>等级</th><th>含义</th><th>本材料中的例子</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pill ok">一手官方</span></td>
+          <td>公司公告、政府部门或统计机构发布</td>
+          <td>知乎 2025 财报与 ESG 报告各项数据、教育部毕业生规模、
+              城镇调查失业率、智联招聘就业力调研、知乎开放平台接口（实测）</td>
+        </tr>
+        <tr>
+          <td><span class="pill warn">第三方调研</span></td>
+          <td>机构调研，样本与口径公开，可核查</td>
+          <td>Reddit 全球调研（n=2340）、Raptive（n=3000）、
+              Klaviyo/Datalily（n=8000）、中国青年报调查（n=1334）、
+              高校职业规划调研（n=460）</td>
+        </tr>
+        <tr>
+          <td><span class="pill bad">第三方统计<br>（年份较早）</span></td>
+          <td><b>民间抽样统计，非官方口径，且有一定年份</b>。
+              仅用于说明方向性，不用于精确测算</td>
+          <td>「45.6% 的知乎问题零回答」（1000 个问题页随机取样）；
+              「59.65% 三零用户、84% 用户不生产内容」（民间用户分析报告）</td>
+        </tr>
+        <tr>
+          <td><span class="pill bad">内部推算</span></td>
+          <td><b>本产品自己的估算，非实测</b></td>
+          <td>知乎求职困惑人群 1500 万–2500 万这一区间；
+              付费转化率、单场会诊成本改善幅度</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>产品能力边界（被问到应当主动说明）</h3>
+  <ul>
+    <li><b>会诊参与者身份目前为模拟</b>，界面上已明确标注。真跑的是检索、判定、
+      编排逻辑与产出生成；模拟的只有「人的身份」这一项。</li>
+    <li><b>未配置知乎 AccessSecret 时</b>，分歧地图使用内置语料，界面同样会标注，
+      不会让用户误以为是真实检索结果。</li>
+    <li><b>「信息不足」分支的行动清单</b>目前仍用通用内容——
+      它的内容（「先把信息拿回来」）是普适的，不依赖具体问题，但这一条应如实说明。</li>
+    <li><b>尚未接入登录与知乎 OAuth</b>。当前版本无需登录即可完整体验。</li>
+    <li><b>未做真实发布通道</b>：结论书通过「一键复制 Markdown」让用户自己带回知乎，
+      不是自动发布到知乎（需要平台授权）。</li>
+    <li><b>专家声誉体系、机构号、订阅制</b>均属规划，本期未实现。</li>
+  </ul>
+
+  <h3>关于「1200 个回答」这个数字</h3>
+  <p>
+    这是产品演示中使用的<b>典型场景设定</b>，用于说明「存量回答很多但无法收敛」
+    这一类困境，<b>不是一次实测的计数结果</b>。
+    实际检索得到的讨论篇数以接入知乎开放平台后的真实返回为准。
+  </p>
+
+  <h3>两条需要特别注意口径的数字</h3>
+  <div class="note warn">
+    <span class="nt">① 「45.6% 的问题零回答」是第三方抽样，且有一定年份</span>
+    这个数字来自民间对知乎 <b>1000 个问题页的随机抽样统计</b>，
+    <b>不是知乎官方口径</b>，且数据有一定年份。
+    同期另一来源（某数据机构库内检索）也观察到类似现象：可回答且浏览量过万、
+    但零回答的问题有数百条，回答数 ≤1 的接近 2 万条。<br>
+    本材料引用它<b>只用于说明方向性</b>（「大量提问得不到回答」是长期存在的结构现象），
+    <b>不用于任何精确测算</b>。产品机制本身不依赖这个数字成立。
+  </div>
+  <div class="note warn">
+    <span class="nt">② 「1500 万–2500 万」是内部推算，不是测量值</span>
+    推导过程已在 2.3 节完整给出：知乎 2025 年报<b>未披露具体 MAU</b>，
+    按公开报道历史区间保守取值 8000 万 × 73.2%（30 岁以下）
+    × 25%–40%（职业决策期占比）得出。
+    <b>它只用于判断量级与优先级，不可作为对外引用的实测数据。</b>
+  </div>
+
+  <div class="foot">
+    <h4>主要数据来源</h4>
+    <ul>
+      <li><b>一手官方</b>：知乎 2025 财年业绩公告（港交所 2026-03-25）；
+          知乎 2025 年中期业绩公告（2025-08-27）；知乎 2025 Q3 / Q4 财报及电话会记录；
+          知乎 2025 年度 ESG 报告（2026-04-17）</li>
+      <li><b>一手官方</b>：教育部 2026 届全国普通高校毕业生规模公告；
+          国家统计局城镇调查失业率（2026-07）；智联招聘《大学生就业力调研报告》</li>
+      <li><b>第三方调研</b>：Reddit Business 全球消费者调研（2025-06，n=2340，美英澳加）；
+          Raptive（2025-08，n=3000，美国）；
+          Klaviyo / Datalily（2026-05，n=8000，8 国）；
+          Talker Research / WordPress VIP（n=1200）；Clutch（2026-08，n=601）</li>
+      <li><b>第三方调研</b>：高校职业生涯规划调研（n=460，2025-12，四川某省属高校 5 个专业）；
+          中国青年报社社会调查中心（n=1334）；全球在线付费知识市场研究（2025）</li>
+      <li><b>第三方统计（请注意年份与口径）</b>：知乎问题回答率抽样统计（1000 个问题页随机取样）；
+          知乎用户结构民间分析报告（三零用户 59.65%、84% 用户不生产内容）</li>
+      <li><b>实测确认</b>：知乎数据开放平台 developer.zhihu.com 的接口能力与鉴权方式
+          （含跨域支持，为实际请求验证）</li>
+    </ul>
+
+    <h4>可运行 Demo</h4>
+    <p style="margin:6px 0 0;color:var(--t3)">
+      已在公网部署，桌面与手机均可打开：
+      <b class="url">306bb598e1034abfbde2e2b8cc5e3439.app.workbuddy.host</b>
+    </p>
+
+    <p style="margin-top:20px;color:var(--t4)">
+      知了诊所 · 汇报材料 v1.1 ｜ 2026-09-13 ｜ 知乎黑客松 2026 · 知识炼金场
+    </p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
