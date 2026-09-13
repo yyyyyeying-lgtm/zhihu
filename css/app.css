@@ -136,6 +136,59 @@ input, textarea { font-family: inherit; }
 .bubble p + p { margin-top: 8px; }
 .bubble .muted { color: var(--t2); font-size: 13.5px; }
 
+/* ---------- 开场温馨提示卡 ----------
+   用户看到的第一样东西，要柔和、有呼吸感、有设计感。
+   刻意与 .notice 类提示条区分：
+     · notice 是「警告 / 说明」，语气冷、边框硬、底色实；
+     · 这张卡用极浅的蓝色渐变 + 左侧一条渐变强调线 + 圆形序号，
+       没有实心边框，靠阴影和留白撑出层次。
+   左缩进 50px = 头像 38px + 间距 12px，与医生气泡左对齐。 */
+.welcome {
+  position: relative; overflow: hidden;
+  margin: 2px 0 10px 50px;
+  max-width: 620px;
+  padding: 20px 22px 18px;
+  border-radius: 18px;
+  background: radial-gradient(120% 140% at 0% 0%,
+              #f0f9ff 0%, #f8fcff 45%, #ffffff 100%);
+  border: 1px solid #dfeefb;
+  box-shadow: 0 8px 24px -16px rgba(0, 84, 179, .5);
+}
+.welcome::before {
+  content: ''; position: absolute; left: 0; top: 16px; bottom: 16px;
+  width: 3px; border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #8ecbff, #0084ff);
+}
+.wc-label {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; letter-spacing: .12em;
+  color: #2b8ae6; margin-bottom: 9px;
+}
+.wc-label::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: #7cc2ff; box-shadow: 0 0 0 3px rgba(124, 194, 255, .22);
+}
+.wc-title {
+  font-size: 16px; font-weight: 600; color: #123d63;
+  letter-spacing: -.01em; margin-bottom: 16px;
+}
+.wc-list { list-style: none; margin: 0; padding: 0; }
+.wc-item { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 12px; }
+.wc-item:last-child { margin-bottom: 0; }
+.wc-n {
+  flex: 0 0 20px; width: 20px; height: 20px; margin-top: 2px;
+  border-radius: 50%; background: #fff;
+  border: 1px solid #cfe6fb; color: #2b8ae6;
+  font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums;
+  display: flex; align-items: center; justify-content: center;
+}
+.wc-t { font-size: 14px; line-height: 1.78; color: #33506b; }
+.wc-foot {
+  margin-top: 16px; padding-top: 13px;
+  border-top: 1px dashed #daeaf7;
+  font-size: 13px; line-height: 1.72; color: #6d8aa6;
+}
+
 .user-row { display: flex; justify-content: flex-end; }
 .user-bubble {
   background: var(--blue); color: #fff;
@@ -909,6 +962,12 @@ input, textarea { font-family: inherit; }
 
   /* 会诊室里的消息与证言：允许收缩，别撑破容器 */
   .msg, .testimony, .msg-body, .tm-body { min-width: 0; }
+
+  /* 温馨提示卡：窄屏取消左缩进，内边距收紧 */
+  .welcome { margin-left: 0; padding: 17px 16px 15px; border-radius: 15px; }
+  .wc-title { font-size: 15px; }
+  .wc-t { font-size: 13.5px; }
+  .wc-foot { font-size: 12.5px; }
 
   /* 弹窗：贴边留一点，内容自己滚 */
   .modal { padding: 12px; }

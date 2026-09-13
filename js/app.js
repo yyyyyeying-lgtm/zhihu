@@ -226,7 +226,7 @@ function draftContent() {
       title: d.title || '',
       lead: d.lead || '这是根据你的情况重新组织的提问草稿。',
       body: d.body || '',
-      whyTitle: '为什么这样问更容易得到回答',
+      whyTitle: '为什么这样问，更容易得到回答',
       hints: d.why || [],
       button: d.button || '复制草稿去知乎提问'
     };
@@ -274,6 +274,26 @@ async function say(html, wait) {
   if (wait) await sleep(wait);
   return n;
 }
+/* ---------------- 开场温馨提示卡 ----------------
+   刻意与 notice 类提示条区分开：notice 是「警告 / 说明」，语气偏冷；
+   这张卡是用户看到的第一样东西，要柔和、要有呼吸感。
+   文案在 data.js 的 welcome 字段，样式见 css 的 .welcome 区块。 */
+function welcomeCard() {
+  const w = D.welcome || {};
+  const items = (w.items || []).map((t, i) =>
+    '<li class="wc-item">' +
+      '<span class="wc-n">' + (i + 1) + '</span>' +
+      '<span class="wc-t">' + esc(t) + '</span>' +
+    '</li>').join('');
+  return node(
+    '<div class="welcome">' +
+      '<div class="wc-label">' + esc(w.label || '温馨提示') + '</div>' +
+      '<div class="wc-title">' + esc(w.title || '') + '</div>' +
+      '<ol class="wc-list">' + items + '</ol>' +
+      '<div class="wc-foot">' + esc(w.foot || '') + '</div>' +
+    '</div>');
+}
+
 async function think(ms) {
   const t = typingBubble();
   attach(t, false);
@@ -306,7 +326,12 @@ function start() {
   run((async () => {
     await say('<p>' + esc(D.greeting[0]) + '</p>', 420);
     await say('<p>' + esc(D.greeting[1]) + '</p>', 420);
-    await say('<p>' + esc(D.greeting[2]) + '</p>');
+    await say('<p>' + esc(D.greeting[2]) + '</p>', 300);
+    /* 开场先给一张温馨提示卡，把流程交代清楚。作用有两个：
+       一是安顿情绪（用户此刻往往是焦虑的），
+       二是提前说明会花多久、会得到什么，避免中途失去耐心。 */
+    attach(welcomeCard(), false);
+    await sleep(260);
     renderComposer();
   })());
 }
@@ -526,7 +551,7 @@ async function onRegister(question) {
   S.triage = t;
 
   await think(700);
-  await say('<p>收到。先给你挂上号。</p>');
+  await say('<p>好的，我记下了。我们接着往下聊。</p>');
 
   const r = S.case.receipt;
   const inner =
@@ -610,7 +635,7 @@ async function runAsk(i) {
    =========================================================== */
 async function runChart() {
   await think(1000);
-  await say('<p>问完了。给你整理一份病历。</p>');
+  await say('<p>问得差不多了。我把你说的情况整理成一份病历，你帮我看看对不对。</p>');
 
   let chart = null;
   if (window.ZHILIAO_AI && ZHILIAO_AI.ready()) {
@@ -692,8 +717,8 @@ async function runChart() {
    =========================================================== */
 async function runMap() {
   await think(1200);
-  await say('<p>病历有了。现在我去翻一遍知乎上关于这件事的存量讨论——' +
-            '我不做摘要，我做<b>争议检测</b>。</p>');
+  await say('<p>病历有了。接下来我去翻一遍知乎上关于这件事的讨论——' +
+            '我不做摘要，我要找的是<b>大家到现在还没说拢的地方</b>。</p>');
 
   /* ---------- v1.7：先从知乎开放平台取真实讨论 ----------
      取到什么，直接决定了这张图是不是「真的」。
@@ -840,10 +865,11 @@ function findingRows(map) {
 async function runInvite() {
   await think(900);
   const nClusters = S.map && S.map.disputes ? S.map.disputes.length : 2;
-  await say('<p>检出 ' + nClusters + ' 处值得吵一次的分歧。我去请人。</p>');
+  await say('<p>有 ' + nClusters + ' 处，大家到现在还没说拢。' +
+            '这种问题，再多看几篇回答也不会有答案——我去请几位走过这条路的人。</p>');
   await think(1400);
-  await say('<p>我不是随便找几个大 V。我找的是<b>在这个具体问题上彼此有话可说的人</b>——' +
-            '相关性高，而且观点要有张力，否则会诊没有意义。</p>');
+  await say('<p>我找的不是粉丝最多的人，是<b>在这个问题上真的有话说的人</b>。' +
+            '而且最好他们观点还不一样——要是大家想法都一致，这一场就没什么意思了。</p>');
 
   let experts = null;
   if (window.ZHILIAO_AI && ZHILIAO_AI.ready() && S.usedAI) {
@@ -951,7 +977,7 @@ async function runInvite() {
     '</span></div>' +
     '<button class="btn wide" id="btnStartRoom">开始会诊（4 人 · 约 15 分钟）</button>';
 
-  const card = docCard('④ 会诊邀请函', '本场会诊参与者', '4 位', inner);
+  const card = docCard('④ 会诊邀请函', '这场会诊，请来了这几位', '共 4 位', inner);
   attach(card);
   setRail(3);
 
@@ -1086,8 +1112,8 @@ async function playPanel() {
    =========================================================== */
 async function runConclusion() {
   await think(1100);
-  await say('<p>会诊结束了。整理成一份结论书——' +
-            '每一条共识我都会标上<b>几位参与者一致</b>，绝不虚构来源。</p>');
+  await say('<p>聊完了。我把大家说的整理成一份结论书——' +
+            '每一条结论我都会标上<b>是几位参与者都同意</b>，来源不含糊。</p>');
 
   let c = null;
   if (window.ZHILIAO_AI && ZHILIAO_AI.ready() && S.usedAI) {
@@ -1173,7 +1199,7 @@ async function runConclusion() {
 
 async function runPlan() {
   await think(800);
-  await say('<p>结论书是公开的，属于大家。接下来说点只属于你的。</p>');
+  await say('<p>结论书是公开的，留给以后搜到这个问题的人。接下来这份，只写给你。</p>');
 
   S.reviewAt = reviewDate(3);
   attachPlanCard(S.plan, S.planNote, '⑥ 行动清单');
@@ -1281,9 +1307,9 @@ async function attachDoneCard(title, subHTML) {
    =========================================================== */
 async function runSettled() {
   await think(900);
-  await say('<p>先说一个可能让你意外的结论：<b>这个问题不用会诊。</b></p>');
-  await say('<p>知乎上关于这件事的讨论有两千多条，结论早就收敛了。' +
-            '这时候请人来吵一遍，只是浪费他们的时间。</p>', 300);
+  await say('<p>先说个可能让你意外的结论：<b>这个问题，不用会诊。</b></p>');
+  await say('<p>知乎上关于这件事的讨论有两千多条，其实早就说拢了。' +
+            '再请人来吵一遍，对他们不太公平，对你也没什么帮助。</p>', 300);
   await think(700);
 
   const st = settledContent();
@@ -1323,7 +1349,7 @@ async function runSettled() {
   setRail(4);
 
   await sleep(500);
-  await say('<p>结论给你了。下面是只属于你的那部分。</p>');
+  await say('<p>结论给你了。下面这份，只写给你。</p>');
   await attachPlanCard(S.plan, S.planNote, '⑤ 行动清单');
   setRail(5);
 
@@ -1338,13 +1364,13 @@ async function runSettled() {
    =========================================================== */
 async function runInsufficient() {
   await think(1000);
-  await say('<p>这一例，我得先跟你说清楚：<b>我给不了你结论。</b></p>');
-  await say('<p>不是没有先例，是材料不够——关于你这个方向的讨论全站只有几十条，' +
-            '而且几乎全是行业综述，没有一条讲「一个本科生该怎么转过去」。</p>', 300);
+  await say('<p>这次我得跟你说实话：<b>这个结论，我给不了你。</b></p>');
+  await say('<p>不是没有先例，是材料太少——关于你这个方向，全站的讨论只有几十条，' +
+            '而且几乎都是行业综述，没有一条讲「一个本科生具体该怎么转过去」。</p>', 300);
   await think(700);
-  await say('<p>硬给你一条路，比不给你更不负责任。</p>');
+  await say('<p>硬凑一条路给你，不如老实跟你说清楚。</p>');
   await think(600);
-  await say('<p>但我不打算就这么把你还回去。<b>我帮你把问题重新问一遍。</b></p>', 400);
+  await say('<p>不过，我也不想就这么让你走。<b>我陪你把这个问题的问法改一改。</b></p>', 400);
 
   const dr = draftContent();
   const body = String(dr.body || '').split('\n')
@@ -1364,7 +1390,7 @@ async function runInsufficient() {
     '<div style="height:16px"></div>' +
     '<button class="btn wide" id="btnCopyDraft">' + esc(dr.button) + '</button>';
 
-  const card = docCard('④ 提问草稿', '我帮不了你，但社区可以', '公开 · 待回答', inner);
+  const card = docCard('④ 提问草稿', '这个结论我给不了，但社区可以', '公开 · 待回答', inner);
   attach(card);
 
   const btn = $('#btnCopyDraft', card);
@@ -1388,7 +1414,7 @@ async function runInsufficient() {
   setRail(4);
 
   await sleep(500);
-  await say('<p>你的第一步不是执行方案，是<b>把信息拿回来</b>。</p>');
+  await say('<p>你现在要做的第一件事，不是照着方案走，而是<b>先把缺的信息拿回来</b>。</p>');
   await attachPlanCard(S.plan, S.planNote, '⑤ 行动清单');
   setRail(5);
 
@@ -1484,8 +1510,8 @@ function copyText(text) {
    =========================================================== */
 async function runHandnotes() {
   await think(900);
-  await say('<p>还有一件事——这场会诊里，四位专家各自讲了一段自己的真实经历。</p>');
-  await say('<p>这些经历不能白说。<b>它们会变成他们自己的内容。</b></p>', 400);
+  await say('<p>还有一件事想跟你说——这场会诊里，四位专家各自讲了一段自己的真实经历。</p>');
+  await say('<p>这些话不该说完就散了。<b>它们会变成他们自己的内容。</b></p>', 400);
   await think(700);
 
   const notes = S.handnotes || [];
@@ -1524,7 +1550,7 @@ async function runHandnotes() {
     '</span></div>' +
     rows;
 
-  attach(docCard('⑦ 会诊手记', '这一场会诊，四位参与者各自带走了一篇内容', '', inner));
+  attach(docCard('⑦ 会诊手记', '会诊结束了，四位参与者各自带走了一篇内容', '', inner));
 
   $$('#stream .fold-head').forEach(head => {
     head.onclick = () => {
