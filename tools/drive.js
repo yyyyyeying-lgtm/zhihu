@@ -342,6 +342,31 @@
         return;
       }
 
+      /* ── v1.12 验证：专家门诊（商业化 · 方案 §11） ──
+         T=70 打开列表   T=71 挂号面板   T=72 演示支付后的号单
+         这条路径不走会诊流程，直接从顶栏进入。 */
+      if (T >= 70 && T <= 72) {
+        await until(() => document.querySelector('.nav-item[data-view="expert"]'), 20000);
+        document.querySelector('.nav-item[data-view="expert"]').click();
+        await W(500);
+        const boot = document.getElementById('boot');
+        if (boot) boot.style.display = 'none';
+        if (T >= 71) {
+          const b = document.querySelector('[data-book]');
+          if (b) b.click();
+          await W(500);
+          if (T === 72) {
+            const slots = document.querySelectorAll('.ec-slot');
+            if (slots[1]) slots[1].click();
+            const pay = document.getElementById('btnPay');
+            if (pay) pay.click();
+            await W(500);
+          }
+        }
+        pin();
+        return;
+      }
+
       /* ── 1. 首页：点示例困惑 → 挂号 ───────────────────── */
       await until(() => document.querySelector('.chip.ex'));
       await W(300);

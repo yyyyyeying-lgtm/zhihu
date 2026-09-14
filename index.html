@@ -90,6 +90,7 @@
   </div>
   <nav class="nav">
     <button class="nav-item active" data-view="clinic">诊疗</button>
+    <button class="nav-item" data-view="expert">专家门诊</button>
     <button class="nav-item" data-view="records">我的病例</button>
   </nav>
   <div class="topbar-right">
@@ -105,6 +106,37 @@
   </div>
   <div class="wrap">
     <div class="stream" id="stream"></div>
+  </div>
+</section>
+
+<!-- ================= 专家门诊（商业化主路径 · 方案 §11） ================= -->
+<section class="view hidden" id="view-expert">
+  <div class="wrap" style="padding-top:32px">
+    <div class="ec-head">
+      <h2>专家门诊</h2>
+      <p class="ec-sub">AI 会诊一直免费。想让真的走过这条路的人再替你复核一遍，可以挂一个专家号。</p>
+    </div>
+
+    <!-- 免费 / 付费的边界：这条线必须一眼看懂 -->
+    <div class="ec-free" id="ecFree"></div>
+
+    <!-- 演示声明 -->
+    <div class="ec-notice" id="ecNotice"></div>
+
+    <!-- 号别与分成 -->
+    <div class="ec-grid">
+      <div class="ec-tiers" id="ecTiers"></div>
+      <div class="ec-split" id="ecSplit"></div>
+    </div>
+
+    <div class="ec-sec-title">可约号源<span class="ec-count" id="ecCount"></span></div>
+    <div class="ec-list" id="ecList"></div>
+
+    <!-- 我挂过的号 -->
+    <div id="ecMineWrap" class="hidden">
+      <div class="ec-sec-title">我挂过的号</div>
+      <div class="ec-list" id="ecMine"></div>
+    </div>
   </div>
 </section>
 
@@ -299,6 +331,23 @@
     </div>
     <div class="modal-foot">
       <button class="btn" data-close="modalHelp">知道了</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 挂号面板（专家门诊） ================= -->
+<div class="modal hidden" id="modalBooking">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="bkTitle">挂专家号</div>
+      <button class="icon-btn" data-close="modalBooking">✕</button>
+    </div>
+    <div id="bkBody"></div>
+    <div class="modal-foot">
+      <div class="doc-sub" id="bkFoot"></div>
+      <div class="spacer"></div>
+      <button class="btn ghost" data-close="modalBooking" id="btnBkCancel">再想想</button>
+      <button class="btn" id="btnPay">确认挂号</button>
     </div>
   </div>
 </div>

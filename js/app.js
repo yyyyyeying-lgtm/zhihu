@@ -1709,10 +1709,217 @@ function switchView(v) {
   $$(".nav-item").forEach(b => b.classList.toggle("active", b.getAttribute("data-view") === v));
   $("#rail").classList.toggle("hidden", v !== "clinic");
   if (v === "records") renderRecords();
+  if (v === "expert") renderExpertClinic();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 function openModal(id) { $("#" + id).classList.remove("hidden"); }
 function closeModal(id) { $("#" + id).classList.add("hidden"); }
+
+/* ===========================================================
+   专家门诊（商业化主路径 · 方案 §11）
+   -----------------------------------------------------------
+   专家门诊 = 创作者声誉达标后开设的付费咨询，平台与创作者分成。
+   本轮是**功能原型**：接单、选时段、计价、分成、出号单的链路全部真跑，
+   但专家是演示画像、支付是演示支付 —— 界面上必须把这句话放在看得见的地方，
+   不能让任何人误以为产生了真实扣款或真实服务承诺。
+   =========================================================== */
+const EC = () => D.expertClinic;
+const EC_ORDERS_KEY = "zhiliao_expert_orders";
+
+function loadOrders() {
+  try { return JSON.parse(localStorage.getItem(EC_ORDERS_KEY) || "[]"); }
+  catch (e) { return []; }
+}
+function saveOrders(list) {
+  try { localStorage.setItem(EC_ORDERS_KEY, JSON.stringify(list.slice(0, 20))); } catch (e) {}
+}
+function money(n) { return "¥" + Number(n).toFixed(0); }
+
+function renderExpertClinic() {
+  const ec = EC();
+  if (!ec) return;
+
+  /* 免费 / 付费边界 */
+  $("#ecFree").innerHTML = ec.freeLine.map(x =>
+    '<div class="ec-free-item">' +
+      '<span class="ec-free-k">' + esc(x.k) + '</span>' +
+      '<span class="ec-free-t">' + esc(x.t) + '</span>' +
+      '<span class="ec-free-tag ' + (x.tag === "免费" ? "is-free" : "is-paid") + '">' +
+        esc(x.tag) + '</span>' +
+    '</div>').join("");
+
+  /* 演示声明 */
+  $("#ecNotice").innerHTML = '<b>演示环境</b><span>' +
+    esc(ec.notice.replace(/^演示环境\s*·\s*/, "")) + '</span>';
+
+  /* 号别 */
+  $("#ecTiers").innerHTML =
+    '<div class="ec-block-title">号别与定价</div>' +
+    ec.tiers.map(t =>
+      '<div class="ec-tier">' +
+        '<div class="ec-tier-top"><span class="ec-tier-name">' + esc(t.name) + '</span>' +
+        '<span class="ec-tier-price">' + money(t.price) + '</span></div>' +
+        '<div class="ec-tier-desc">' + esc(t.desc) + '</div>' +
+      '</div>').join("");
+
+  /* 分成 —— 供给端为什么愿意来 */
+  const s = ec.split;
+  $("#ecSplit").innerHTML =
+    '<div class="ec-block-title">平台与创作者分成</div>' +
+    '<div class="ec-split-bar">' +
+      '<div class="ec-split-seg creator" style="width:' + s.creator + '%">创作者 ' + s.creator + '%</div>' +
+      '<div class="ec-split-seg platform" style="width:' + s.platform + '%">平台 ' + s.platform + '%</div>' +
+    '</div>' +
+    '<div class="ec-split-note">' + esc(s.note) + '</div>' +
+    '<div class="ec-split-eg">以主任专家号 ' + money(ec.tiers[1].price) + ' 为例：' +
+      '创作者得 <b>' + money(ec.tiers[1].price * s.creator / 100) + '</b>，' +
+      '平台得 <b>' + money(ec.tiers[1].price * s.platform / 100) + '</b></div>';
+
+  /* 号源 */
+  $("#ecCount").textContent = ec.doctors.length + " 位可约";
+  $("#ecList").innerHTML = ec.doctors.map(d => {
+    const tier = ec.tiers.find(t => t.id === d.tier) || ec.tiers[0];
+    return '<div class="ec-doc">' +
+      '<div class="ec-doc-av">' + esc(d.initial) + '</div>' +
+      '<div class="ec-doc-main">' +
+        '<div class="ec-doc-top">' +
+          '<span class="ec-doc-name">' + esc(d.name) + '</span>' +
+          '<span class="ec-rep">' + esc(d.rep) + '</span>' +
+          '<span class="ec-doc-tier">' + esc(tier.name) + '</span>' +
+        '</div>' +
+        '<div class="ec-doc-title">' + esc(d.title) + '</div>' +
+        '<div class="ec-doc-good">擅长：' + esc(d.good) + '</div>' +
+        '<div class="ec-doc-line">「' + esc(d.line) + '」</div>' +
+        '<div class="ec-doc-meta">已服务 ' + d.served + ' 人次 · 好评率 ' + d.rate + '% · 可约 ' +
+          d.slots.length + ' 个时段</div>' +
+      '</div>' +
+      '<div class="ec-doc-buy">' +
+        '<div class="ec-doc-price">' + money(d.price) + '</div>' +
+        '<button class="btn sm" data-book="' + esc(d.id) + '">挂这个号</button>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+
+  $$("[data-book]").forEach(b => {
+    b.onclick = () => openBooking(b.getAttribute("data-book"));
+  });
+
+  renderMyOrders();
+}
+
+function renderMyOrders() {
+  const list = loadOrders();
+  const wrap = $("#ecMineWrap");
+  if (!list.length) { wrap.classList.add("hidden"); return; }
+  wrap.classList.remove("hidden");
+  $("#ecMine").innerHTML = list.map(o =>
+    '<div class="ec-order">' +
+      '<div class="ec-order-no">' + esc(o.no) + '</div>' +
+      '<div class="ec-order-main">' +
+        '<div class="ec-order-top">' + esc(o.doctor) + ' · ' + esc(o.tier) + '</div>' +
+        '<div class="ec-order-sub">' + esc(o.slot) + ' · ' + esc(o.question || "未填困惑") + '</div>' +
+      '</div>' +
+      '<div class="ec-order-price">' + money(o.price) + '</div>' +
+    '</div>').join("");
+}
+
+/* ---------- 挂号流程 ---------- */
+let BKG = null;
+
+function openBooking(id) {
+  const ec = EC();
+  const d = ec.doctors.find(x => x.id === id);
+  if (!d) return;
+  const tier = ec.tiers.find(t => t.id === d.tier) || ec.tiers[0];
+  BKG = { doctor: d, tier: tier, slot: d.slots[0], paid: false, no: "" };
+  $("#bkTitle").textContent = "挂 " + d.name + " 的号";
+  $("#bkFoot").textContent = ec.notice;
+  renderBooking();
+  openModal("modalBooking");
+}
+
+function renderBooking() {
+  const ec = EC();
+  const d = BKG.doctor, tier = BKG.tier, s = ec.split;
+  const creatorCut = tier.price * s.creator / 100;
+  const platformCut = tier.price * s.platform / 100;
+
+  if (BKG.paid) {
+    /* 已支付：出号单 */
+    $("#bkBody").innerHTML =
+      '<div class="ec-ticket">' +
+        '<div class="ec-ticket-head">' +
+          '<span class="ec-ticket-no">' + esc(BKG.no) + '</span>' +
+          '<span class="ec-ticket-badge">演示号单</span>' +
+        '</div>' +
+        '<div class="ec-ticket-row"><span>专家</span><b>' + esc(d.name) + ' · ' + esc(d.title) + '</b></div>' +
+        '<div class="ec-ticket-row"><span>号别</span><b>' + esc(tier.name) + '　' + money(tier.price) + '</b></div>' +
+        '<div class="ec-ticket-row"><span>时段</span><b>' + esc(BKG.slot) + '</b></div>' +
+        '<div class="ec-ticket-row"><span>困惑</span><b>' + esc(BKG.question || "（未填）") + '</b></div>' +
+        '<div class="ec-ticket-split">本次分成：创作者 <b>' + money(creatorCut) + '</b> ／ 平台 <b>' + money(platformCut) + '</b></div>' +
+      '</div>' +
+      '<div class="ec-ticket-warn">这是<b>演示号单</b>：没有发生真实扣款，也没有真实专家接单。' +
+        '它的作用是让你看到「挂号 → 计价 → 分成 → 出号单」这条链路是怎么跑的。</div>';
+    $("#btnPay").textContent = "完成";
+    $("#btnPay").onclick = () => closeModal("modalBooking");
+    $("#btnBkCancel").classList.add("hidden");
+    return;
+  }
+
+  $("#btnBkCancel").classList.remove("hidden");
+  $("#bkBody").innerHTML =
+    '<div class="ec-bk-doc">' +
+      '<div class="ec-doc-av">' + esc(d.initial) + '</div>' +
+      '<div>' +
+        '<div class="ec-doc-top"><span class="ec-doc-name">' + esc(d.name) + '</span>' +
+        '<span class="ec-rep">' + esc(d.rep) + '</span></div>' +
+        '<div class="ec-doc-title">' + esc(d.title) + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="ec-bk-label">选择时段</div>' +
+    '<div class="ec-slots">' + d.slots.map((sl, i) =>
+      '<button class="ec-slot' + (i === 0 ? ' on' : '') + '" data-slot="' + esc(sl) + '">' +
+        esc(sl) + '</button>').join("") + '</div>' +
+
+    '<div class="ec-bk-label">这次想请专家看什么（可选）</div>' +
+    '<input class="ec-input" id="bkQuestion" placeholder="一句话说清你的困惑，专家会带着它先看一遍你的会诊结论书">' +
+
+    '<div class="ec-bk-label">费用明细</div>' +
+    '<div class="ec-bill">' +
+      '<div class="ec-bill-row"><span>' + esc(tier.name) + '</span><b>' + money(tier.price) + '</b></div>' +
+      '<div class="ec-bill-row sub"><span>其中：创作者所得（' + s.creator + '%）</span><b>' + money(creatorCut) + '</b></div>' +
+      '<div class="ec-bill-row sub"><span>其中：平台服务费（' + s.platform + '%）</span><b>' + money(platformCut) + '</b></div>' +
+      '<div class="ec-bill-row total"><span>应付</span><b>' + money(tier.price) + '</b></div>' +
+    '</div>' +
+    '<div class="ec-bk-note">' + esc(tier.desc) + '</div>';
+
+  $$("[data-slot]").forEach(b => {
+    b.onclick = () => {
+      BKG.slot = b.getAttribute("data-slot");
+      $$("[data-slot]").forEach(x => x.classList.toggle("on", x === b));
+    };
+  });
+  $("#btnPay").textContent = "确认挂号（演示支付 " + money(tier.price) + "）";
+  $("#btnPay").onclick = payBooking;
+}
+
+function payBooking() {
+  if (BKG.paid) return;
+  const q = $("#bkQuestion");
+  BKG.question = q ? q.value.trim() : "";
+  BKG.paid = true;
+  BKG.no = "ZL-" + String(Date.now()).slice(-6);
+  const list = loadOrders();
+  list.unshift({
+    no: BKG.no, doctor: BKG.doctor.name, tier: BKG.tier.name,
+    slot: BKG.slot, price: BKG.tier.price, question: BKG.question,
+    at: new Date().toISOString()
+  });
+  saveOrders(list);
+  renderBooking();
+  renderMyOrders();
+}
 
 /* ===========================================================
    设置
@@ -1878,6 +2085,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $$(".nav-item").forEach(b => {
     b.onclick = () => switchView(b.getAttribute("data-view"));
   });
+  $("#btnPay").onclick = payBooking;
+  renderExpertClinic();
   $("#btnSettings").onclick = () => openModal("modalSettings");
   $("#btnHelp").onclick = () => openModal("modalHelp");
   $("#btnNewCase").onclick = () => { switchView("clinic"); start(); };

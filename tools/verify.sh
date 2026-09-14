@@ -109,15 +109,19 @@ STAGE_NAME=(
   [51]="真实 AI 判定已确诊 · 分支跟随"
   [60]="知乎数据源 · 只接数据"
   [61]="知乎数据源 · 数据 + AI"
+  [70]="专家门诊 · 号源列表"
+  [71]="专家门诊 · 挂号面板"
+  [72]="专家门诊 · 演示号单"
 )
 
-for t in 1 2 3 4 5 6 7 8 9 10 11 12 20 21 30 31 40 50 51 60 61; do
+for t in 1 2 3 4 5 6 7 8 9 10 11 12 20 21 30 31 40 50 51 60 61 70 71 72; do
   h=2400
   [ "$t" -ge 8 ] && h=5600
   [ "$t" -eq 10 ] && h=900
   [ "$t" -eq 11 ] && h=900
   [ "$t" -eq 12 ] && h=1800
   { [ "$t" -eq 20 ] || [ "$t" -eq 21 ]; } && h=2000
+  { [ "$t" -ge 70 ]; } && h=1500
   [ "$t" -eq 30 ] && h=1200
   { [ "$t" -eq 31 ]; } && h=1200
   [ "$t" -eq 40 ] && h=1200
@@ -204,13 +208,13 @@ printf '─%.0s' {1..56}; echo
 echo "  DOM 断言（完成态）"
 printf '─%.0s' {1..56}; echo
 
-for st in 9 20 21 30 31 40 50 51 60 61; do
+for st in 9 20 21 30 31 40 50 51 60 61 70 71 72; do
   "$CHROME" --headless=new --disable-gpu --no-sandbox \
     --window-size=1180,2400 --virtual-time-budget=150000 \
     --dump-dom "file://$WORK/app/index.html#$st" 2>/dev/null > "$WORK/dom-$st.html"
 done
 
-"$PY" - "$WORK/dom-9.html" "$WORK/dom-20.html" "$WORK/dom-21.html" "$WORK/dom-30.html" "$WORK/dom-31.html" "$WORK/dom-40.html" "$WORK/dom-50.html" "$WORK/dom-51.html" "$WORK/dom-60.html" "$WORK/dom-61.html" "$WORK/mobile-dom.html" <<'PYEOF'
+"$PY" - "$WORK/dom-9.html" "$WORK/dom-20.html" "$WORK/dom-21.html" "$WORK/dom-30.html" "$WORK/dom-31.html" "$WORK/dom-40.html" "$WORK/dom-50.html" "$WORK/dom-51.html" "$WORK/dom-60.html" "$WORK/dom-61.html" "$WORK/mobile-dom.html" "$WORK/dom-70.html" "$WORK/dom-71.html" "$WORK/dom-72.html" <<'PYEOF'
 import re, sys
 
 main = open(sys.argv[1], encoding="utf-8").read()   # 分歧分支（完整流程）
@@ -226,6 +230,9 @@ zhihu_ai = open(sys.argv[10], encoding="utf-8").read()    # 知乎数据 + AI（
 _m = re.search(r"<title>([^<]*)</title>",
                open(sys.argv[11], encoding="utf-8").read())
 mobile = _m.group(1) if _m else ""
+ec_list = open(sys.argv[12], encoding="utf-8").read()    # 专家门诊列表（v1.12）
+ec_book = open(sys.argv[13], encoding="utf-8").read()    # 挂号面板（v1.12）
+ec_ticket = open(sys.argv[14], encoding="utf-8").read()  # 演示号单（v1.12）
 
 
 def _mo(label):
@@ -374,6 +381,45 @@ report("判定真的驱动了分支（v1.5 新增）", [
     ("进度轨不含「会诊」",         '会诊' not in rail_labels(ai_settled)),
     ("完成态已出现",              ai_settled.count('done-card') >= 1),
     ("没有 JS 报错",              '<title>ERR:' not in ai_settled),
+])
+
+report("专家门诊 · 商业化（v1.12 新增）", [
+    # —— 入口与视图 ——
+    ("顶栏有专家门诊入口",        'data-view="expert"' in ec_list),
+    ("视图能打开并渲染",          'id="view-expert"' in ec_list and 'ec-head' in ec_list),
+    # —— 免费 / 付费边界必须一眼看懂 ——
+    ("列出免费与付费的边界",       ec_list.count('ec-free-item') >= 3),
+    ("边界里同时出现免费与付费",    'is-free' in ec_list and 'is-paid' in ec_list),
+    ("写明 AI 会诊免费",          'AI 会诊' in ec_list),
+    # —— ★ 演示声明：付款类功能必须显著标注，不能被伪装成真实扣款 ——
+    ("显著标注演示环境",          'ec-notice' in ec_list),
+    ("明确写「不产生真实扣款」",    '不产生真实扣款' in ec_list),
+    ("明确写不构成真实服务承诺",    '不构成真实服务承诺' in ec_list),
+    # —— 号别与定价 ——
+    ("有两种号别",               ec_list.count('ec-tier') >= 2),
+    ("号别带价格",               'ec-tier-price' in ec_list and '¥' in ec_list),
+    # —— 分成模型（供给端为什么来）——
+    ("展示平台与创作者分成",       'ec-split' in ec_list),
+    ("分成比例 70/30 可见",       '创作者 70%' in ec_list and '平台 30%' in ec_list),
+    ("给出分成算例",             'ec-split-eg' in ec_list),
+    # —— 号源 ——
+    ("号源列表有内容",            'ec-doc' in ec_list),
+    ("每位号源有声誉等级",         'ec-rep' in ec_list),
+    ("每位号源有擅长方向",         'ec-doc-good' in ec_list),
+    ("号源有可约时段与接单按钮",    'data-book' in ec_list),
+    # —— 挂号面板 ——
+    ("挂号面板能打开",            'id="modalBooking"' in ec_book),
+    ("可选时段",                ec_book.count('data-slot') >= 2),
+    ("费用明细逐项列出",          ec_book.count('ec-bill-row') >= 3),
+    ("明细里写明创作者所得",       '创作者所得' in ec_book),
+    ("明细里写明平台服务费",       '平台服务费' in ec_book),
+    ("按钮写明是演示支付",         '演示支付' in ec_book),
+    # —— 号单 ——
+    ("演示支付后出号单",          'ec-ticket' in ec_ticket),
+    ("号单编号可读",             'ec-ticket-no' in ec_ticket),
+    ("号单带「演示号单」标记",      '演示号单' in ec_ticket),
+    ("号单复述本次分成",          'ec-ticket-split' in ec_ticket),
+    ("号单再次声明未真实扣款",      '没有发生真实扣款' in ec_ticket),
 ])
 
 report("现场演示能力（v1.3 新增）", [
