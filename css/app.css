@@ -172,17 +172,32 @@ input, textarea { font-family: inherit; }
   font-size: 16px; font-weight: 600; color: #123d63;
   letter-spacing: -.01em; margin-bottom: 16px;
 }
-.wc-list { list-style: none; margin: 0; padding: 0; }
-.wc-item { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 12px; }
-.wc-item:last-child { margin-bottom: 0; }
-.wc-n {
-  flex: 0 0 20px; width: 20px; height: 20px; margin-top: 2px;
-  border-radius: 50%; background: #fff;
-  border: 1px solid #cfe6fb; color: #2b8ae6;
-  font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums;
-  display: flex; align-items: center; justify-content: center;
+/* v1.11：从「编号清单」改成「三步旅程」。
+   三个等宽的步骤卡横排，中间用连接符串起来 ——
+   一眼看出「这是要经过的三站」，而不是「要完成的三条任务」。 */
+.wc-journey { display: flex; gap: 8px; align-items: stretch; }
+.wc-item {
+  flex: 1 1 0; min-width: 0;
+  background: #fff; border: 1px solid #e3f0fb; border-radius: 13px;
+  padding: 14px 14px 13px;
+  box-shadow: 0 3px 10px -8px rgba(0, 84, 179, .35);
+  transition: transform .16s ease, box-shadow .16s ease;
 }
-.wc-t { font-size: 14px; line-height: 1.78; color: #33506b; }
+.wc-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -10px rgba(0, 84, 179, .4);
+}
+.wc-ic  { font-size: 21px; line-height: 1; margin-bottom: 9px; }
+.wc-word {
+  font-size: 14px; font-weight: 700; color: #123d63;
+  letter-spacing: .01em; margin-bottom: 6px;
+}
+.wc-desc { font-size: 12.5px; line-height: 1.66; color: #4a6b8a; }
+.wc-link {
+  align-self: center; flex: 0 0 auto;
+  color: #9ccbf6; font-size: 15px; font-weight: 600; padding: 0 1px;
+  user-select: none;
+}
 .wc-foot {
   margin-top: 16px; padding-top: 13px;
   border-top: 1px dashed #daeaf7;
@@ -262,7 +277,12 @@ input, textarea { font-family: inherit; }
 .kv .v { flex: 1; }
 
 /* ---------- 快捷选项 ---------- */
-.chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
+/* v1.11：给示例加个引导语 —— 原来示例直接摆一排，用户不知道它们是干嘛的 */
+.chips-head {
+  margin: 16px 0 9px 2px;
+  font-size: 12.5px; color: var(--t3); letter-spacing: .01em;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 0; }
 .chip {
   padding: 8px 15px; border-radius: 18px;
   border: 1px solid var(--border-strong); background: #fff;
@@ -963,10 +983,21 @@ input, textarea { font-family: inherit; }
   /* 会诊室里的消息与证言：允许收缩，别撑破容器 */
   .msg, .testimony, .msg-body, .tm-body { min-width: 0; }
 
-  /* 温馨提示卡：窄屏取消左缩进，内边距收紧 */
+  /* 温馨提示卡：窄屏取消左缩进，旅程从横排改成纵向堆叠 */
   .welcome { margin-left: 0; padding: 17px 16px 15px; border-radius: 15px; }
   .wc-title { font-size: 15px; }
-  .wc-t { font-size: 13.5px; }
+  .wc-journey { flex-direction: column; gap: 9px; }
+  .wc-link { display: none; }
+  /* 每一步：图标居左、标题与描述居右（两列 grid）。
+     如果用 flex 把图标/词/描述当三个横向子项，「先聊聊」会被挤成竖排。 */
+  .wc-item {
+    display: grid; grid-template-columns: auto 1fr;
+    column-gap: 12px; align-items: start; padding: 12px 14px;
+  }
+  .wc-item:hover { transform: none; }
+  .wc-ic { grid-column: 1; grid-row: 1 / span 2; font-size: 19px; margin: 1px 0 0; }
+  .wc-word { grid-column: 2; margin: 0 0 3px; font-size: 13.5px; }
+  .wc-desc { grid-column: 2; font-size: 12.5px; }
   .wc-foot { font-size: 12.5px; }
 
   /* 弹窗：贴边留一点，内容自己滚 */

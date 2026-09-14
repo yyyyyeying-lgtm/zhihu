@@ -276,16 +276,18 @@ report("病历闭环（v1.4 新增）", [
     ("档案里有进度条",         'rec-prog-bar' in archive),
 ])
 
-report("开场体验与话术（v1.10 新增）", [
+report("开场体验与话术（v1.11 升级）", [
     ("开场有温馨提示卡",          'class="welcome"' in s),
     ("提示卡有标签与标题",        'wc-label' in s and 'wc-title' in s),
-    ("提示卡有三条要点",          s.count('wc-item') >= 3),
+    ("提示卡是三步旅程",          s.count('wc-item') >= 3 and 'wc-journey' in s),
     ("提示卡有收尾语",            'wc-foot' in s),
-    ("开场话术已改柔和",          '这里没有标准答案' in s),
-    # 下面两条是否定式断言：防止以后有人把生硬话术改回来
+    ("开场话术是柔和的新版",       '不收挂号费' in s and '放不下' in s),
+    # 下面三条是否定式断言：防止以后有人把生硬话术改回来
     ("没有「给你挂上号」这类表述",  '挂上号' not in s),
     ("没有「值得吵一次」这类表述",  '值得吵一次' not in s),
     ("没有「浪费他们的时间」",     '浪费他们的时间' not in s),
+    # 上一版的开场话术已经退役，防止回退
+    ("旧开场话术已退役",           '这里没有标准答案' not in s),
 ])
 
 report("形象与称谓统一（v1.3.1 插入）", [
@@ -379,6 +381,7 @@ report("现场演示能力（v1.3 新增）", [
     ("重置后没有残留文书卡",        after_reset.count('class="doc-card"') == 0),
     ("重置后没有完成态",           after_reset.count('done-card') == 0),
     ("重置后三个示例都在",          after_reset.count('chip ex') >= 3),
+    ("示例有引导语（v1.11）",        '不知道从哪说起' in after_reset),
     ("首屏有「看完整演示」入口",     'btnWatchDemo' in after_reset),
     ("自动演示能自己走完全流程",     pilot.count('done-card') >= 1),
     ("自动演示走的是会诊分支",       pilot.count('class="hn"') >= 4),

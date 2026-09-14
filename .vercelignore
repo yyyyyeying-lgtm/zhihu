@@ -20,6 +20,10 @@ tools/
 知了诊所.app/
 启动知了诊所.command
 知了诊所-产品方案-终版.docx
+# 运维手册：拆解开会让站点多出一个可公开访问的 /知了诊所-域名配置手册.html
+知了诊所-域名配置手册.html
+# 运维脚本：同上，且内容含域名与 IP，没必要公开
+一键配置域名解析.command
 
 # ---------- 仓库级文档 ----------
 README.md
@@ -34,3 +38,11 @@ LICENSE
 ._*
 .workbuddy/
 *.log
+
+# ---------- 凭据（必须排除）----------
+# `vercel link` 会生成 .env.local，里面有 VERCEL_OIDC_TOKEN。
+# 虽然 .gitignore 已经挡住它不进版本库，但 .vercelignore 是排除法 ——
+# 不写在这里，它就会被上传到部署产物里。
+.env
+.env.*
+.env*

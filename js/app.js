@@ -277,19 +277,22 @@ async function say(html, wait) {
 /* ---------------- 开场温馨提示卡 ----------------
    刻意与 notice 类提示条区分开：notice 是「警告 / 说明」，语气偏冷；
    这张卡是用户看到的第一样东西，要柔和、要有呼吸感。
-   文案在 data.js 的 welcome 字段，样式见 css 的 .welcome 区块。 */
+   v1.11：从「编号清单」改成「三步旅程」。
+   清单让人以为自己在走流程，旅程让人知道这只是路上要经过的三站。
+   文案在 data.js 的 welcome 字段，样式见 css 的 .welcome / .wc-journey 区块。 */
 function welcomeCard() {
   const w = D.welcome || {};
-  const items = (w.items || []).map((t, i) =>
-    '<li class="wc-item">' +
-      '<span class="wc-n">' + (i + 1) + '</span>' +
-      '<span class="wc-t">' + esc(t) + '</span>' +
-    '</li>').join('');
+  const steps = (w.steps || []).map((st, i) =>
+    '<div class="wc-item">' +
+      '<div class="wc-ic">' + esc(st.ic || '') + '</div>' +
+      '<div class="wc-word">' + esc(st.word || '') + '</div>' +
+      '<div class="wc-desc">' + esc(st.desc || '') + '</div>' +
+    '</div>').join('<div class="wc-link" aria-hidden="true">→</div>');
   return node(
     '<div class="welcome">' +
       '<div class="wc-label">' + esc(w.label || '温馨提示') + '</div>' +
       '<div class="wc-title">' + esc(w.title || '') + '</div>' +
-      '<ol class="wc-list">' + items + '</ol>' +
+      '<div class="wc-journey">' + steps + '</div>' +
       '<div class="wc-foot">' + esc(w.foot || '') + '</div>' +
     '</div>');
 }
@@ -476,19 +479,20 @@ function renderComposer() {
   const el = node(
     '<div>' +
       '<div class="composer">' +
-        '<textarea id="qInput" rows="2" placeholder="说说你现在的困惑…例如：普通本科生想进 AI 行业，还有机会吗？"></textarea>' +
+        '<textarea id="qInput" rows="2" placeholder="想到什么说什么，不用组织语言…比如：普通本科生想进 AI 行业，还有机会吗？"></textarea>' +
         '<div class="composer-bar">' +
-          '<span class="composer-hint">越具体，会诊越准</span>' +
+          '<span class="composer-hint">写得越具体，我越好办</span>' +
           '<button class="btn" id="btnReg" disabled>挂号</button>' +
         '</div>' +
       '</div>' +
-      '<div class="chips" style="margin-top:14px">' + chips + '</div>' +
+      '<div class="chips-head">不知道从哪说起？点一个试试 ↓</div>' +
+      '<div class="chips">' + chips + '</div>' +
       /* 评委打开链接时不会知道有 P 键这个快捷键。
          把「自动演示」这件事从隐藏快捷键变成看得见的入口 —— 这是第一眼就要看到的东西。 */
       '<div class="wd-row">' +
         '<button class="wd-btn" id="btnWatchDemo">' +
-          '<span class="wd-ic">▶</span>直接看一次完整演示' +
-          '<span class="wd-note">它会自己走完整个流程，约 90 秒</span>' +
+          '<span class="wd-ic">▶</span>不想自己跑？看我演示一遍' +
+          '<span class="wd-note">它会自己走完全程，约 90 秒</span>' +
         '</button>' +
       '</div>' +
     '</div>');
@@ -536,6 +540,8 @@ async function onRegister(question) {
   S.verdict = S.case.verdict;
   const box = $("#qInput") && $("#qInput").closest('.composer').parentElement;
   if (box) {
+    const chipsHead = $(".chips-head", box);
+    if (chipsHead) chipsHead.remove();
     const chips = $(".chips", box);
     if (chips) chips.remove();
     const c = $(".composer", box);
@@ -551,7 +557,7 @@ async function onRegister(question) {
   S.triage = t;
 
   await think(700);
-  await say('<p>好的，我记下了。我们接着往下聊。</p>');
+  await say('<p>好，我记下了。咱们接着来。</p>');
 
   const r = S.case.receipt;
   const inner =
@@ -635,7 +641,7 @@ async function runAsk(i) {
    =========================================================== */
 async function runChart() {
   await think(1000);
-  await say('<p>问得差不多了。我把你说的情况整理成一份病历，你帮我看看对不对。</p>');
+  await say('<p>问得差不多了。我把你刚才说的整理成一份病历——你帮我看看，哪里写错了、哪里漏了。</p>');
 
   let chart = null;
   if (window.ZHILIAO_AI && ZHILIAO_AI.ready()) {
@@ -717,8 +723,8 @@ async function runChart() {
    =========================================================== */
 async function runMap() {
   await think(1200);
-  await say('<p>病历有了。接下来我去翻一遍知乎上关于这件事的讨论——' +
-            '我不做摘要，我要找的是<b>大家到现在还没说拢的地方</b>。</p>');
+  await say('<p>病历有了。接下来我去翻一遍知乎——我不做摘要，' +
+            '要专门找的是<b>大家到现在还没吵拢的地方</b>。</p>');
 
   /* ---------- v1.7：先从知乎开放平台取真实讨论 ----------
      取到什么，直接决定了这张图是不是「真的」。
@@ -726,7 +732,7 @@ async function runMap() {
   let real = null;
   if (window.ZHILIAO_ZHIHU && ZHILIAO_ZHIHU.ready()) {
     S.zhihuTried = true;
-    await say('<p>这次我不凭印象——用知乎数据开放平台的站内搜索，把真实讨论先取回来。</p>');
+    await say('<p>这次我不凭印象。我把知乎站内搜索拉过来，先把真实讨论取回来。</p>');
     try {
       const r = await ZHILIAO_ZHIHU.search(searchQuery(), 10);
       if (r.items && r.items.length) {
@@ -865,10 +871,10 @@ function findingRows(map) {
 async function runInvite() {
   await think(900);
   const nClusters = S.map && S.map.disputes ? S.map.disputes.length : 2;
-  await say('<p>有 ' + nClusters + ' 处，大家到现在还没说拢。' +
-            '这种问题，再多看几篇回答也不会有答案——我去请几位走过这条路的人。</p>');
+  await say('<p>看了一圈，有 ' + nClusters + ' 处大家到现在还没吵拢。' +
+            '这种问题，再多刷十篇回答也不会有结果——我去请几位走过这条路的人。</p>');
   await think(1400);
-  await say('<p>我找的不是粉丝最多的人，是<b>在这个问题上真的有话说的人</b>。' +
+  await say('<p>我要找的不是粉丝最多的，是<b>在这件事上真的有话可说的人</b>。' +
             '而且最好他们观点还不一样——要是大家想法都一致，这一场就没什么意思了。</p>');
 
   let experts = null;
@@ -1113,7 +1119,7 @@ async function playPanel() {
 async function runConclusion() {
   await think(1100);
   await say('<p>聊完了。我把大家说的整理成一份结论书——' +
-            '每一条结论我都会标上<b>是几位参与者都同意</b>，来源不含糊。</p>');
+            '每条结论都标上<b>是几位参与者都同意</b>的，来源不含糊。</p>');
 
   let c = null;
   if (window.ZHILIAO_AI && ZHILIAO_AI.ready() && S.usedAI) {

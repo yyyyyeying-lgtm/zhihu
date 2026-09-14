@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知了诊所 · 自定义域名配置手册</title>
+<style>
+  :root{
+    --blue:#0084ff; --blue-d:#0068d6; --blue-l:#e8f3ff;
+    --ink:#1a1a1a; --ink-2:#4a5568; --ink-3:#8a94a6;
+    --line:#e6ebf2; --bg:#f5f7fb; --card:#fff;
+    --amber:#b26a00; --amber-bg:#fff8e6; --amber-line:#ffe0a3;
+    --red:#c0392b; --red-bg:#fdf1ef; --red-line:#f6d4cf;
+    --green:#12805c; --green-bg:#eefaf5; --green-line:#bfe9db;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  body{
+    margin:0; background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--ink); line-height:1.7; font-size:15px;
+    overflow-wrap:break-word;
+  }
+  code{overflow-wrap:anywhere}
+  .wrap{max-width:880px; margin:0 auto; padding:40px 22px 80px}
+
+  /* ---------- 页头 ---------- */
+  header{margin-bottom:26px}
+  .eyebrow{font-size:12px; letter-spacing:.16em; color:var(--blue); font-weight:700; margin-bottom:10px}
+  h1{margin:0 0 12px; font-size:30px; line-height:1.3; letter-spacing:-.02em}
+  .sub{color:var(--ink-2); font-size:14.5px; margin:0}
+  .meta{margin-top:14px; font-size:12.5px; color:var(--ink-3)}
+
+  /* ---------- 域名填空 ---------- */
+  .fill{
+    margin:24px 0 30px; padding:20px 22px; border-radius:16px;
+    background:linear-gradient(135deg,#eaf4ff 0%,#f7fbff 100%);
+    border:1px solid #d6e9ff;
+  }
+  .fill label{display:block; font-size:13px; font-weight:700; color:var(--blue-d); margin-bottom:10px}
+  .fill-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .fill input{
+    flex:1; min-width:220px; padding:11px 14px; font-size:15px;
+    border:1px solid #c9dff5; border-radius:10px; background:#fff;
+    font-family:inherit; color:var(--ink); outline:none;
+  }
+  .fill input:focus{border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,132,255,.12)}
+  .fill .hint{font-size:12.5px; color:var(--ink-3); margin:10px 0 0}
+
+  /* ---------- 结论卡 ---------- */
+  .lead{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:22px 24px; margin-bottom:34px; box-shadow:0 6px 24px -18px rgba(0,40,90,.4);
+  }
+  .lead p{margin:0 0 10px}
+  .lead p:last-child{margin-bottom:0}
+  .lead b{color:var(--blue-d)}
+
+  /* ---------- 步骤 ---------- */
+  .step{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:24px 26px; margin-bottom:18px; box-shadow:0 6px 24px -20px rgba(0,40,90,.35);
+  }
+  .step-h{display:flex; gap:14px; align-items:flex-start; margin-bottom:14px}
+  .num{
+    flex:none; width:30px; height:30px; border-radius:9px;
+    background:var(--blue); color:#fff; font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .num.alt{font-size:10px; letter-spacing:.02em}
+  .step-h h2{margin:0; font-size:18.5px; letter-spacing:-.01em}
+  .step-h .where{display:block; font-size:12.5px; color:var(--ink-3); font-weight:400; margin-top:3px}
+  .step ol, .step ul{margin:0 0 0 0; padding-left:20px}
+  .step li{margin-bottom:7px}
+  .step li:last-child{margin-bottom:0}
+  .step p{margin:0 0 12px}
+  .step p:last-child{margin-bottom:0}
+
+  /* ---------- 复制块 ---------- */
+  .copy{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:#0f172a; color:#e6f1ff; border-radius:11px;
+    padding:12px 14px; margin:12px 0; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:14px; word-break:break-all;
+  }
+  .copy code{background:none; color:inherit; font-size:inherit; padding:0}
+  .copy button{
+    flex:none; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08);
+    color:#e6f1ff; border-radius:7px; padding:5px 12px; font-size:12.5px;
+    cursor:pointer; font-family:inherit; transition:.15s; white-space:nowrap;
+  }
+  .copy button:hover{background:rgba(255,255,255,.18)}
+  .copy button.ok{background:var(--green); border-color:var(--green); color:#fff}
+
+  /* ---------- 表格 ---------- */
+  /* 窄屏时表格整体横向滑动，不去挤破页面 */
+  .tbl{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:14px 0; border-radius:10px}
+  table{width:100%; border-collapse:collapse; margin:0; font-size:14px; min-width:520px}
+  th,td{border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top}
+  th{background:#f0f5fb; font-weight:700; font-size:13px; color:var(--ink-2); white-space:nowrap}
+  td code{
+    background:#eef3f9; padding:2px 6px; border-radius:5px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13px; color:var(--blue-d);
+  }
+  .need{background:var(--blue-l); font-weight:600}
+  .skip{background:#fafbfc; color:var(--ink-3)}
+
+  /* ---------- 提示条 ---------- */
+  .tip{border-radius:12px; padding:16px 18px; margin:16px 0; font-size:14px; border:1px solid}
+  .tip .t{font-weight:700; margin-bottom:6px; font-size:13.5px}
+  .tip p{margin:0 0 8px}
+  .tip p:last-child{margin:0}
+  .tip.warn{background:var(--amber-bg); border-color:var(--amber-line); color:#6b4200}
+  .tip.warn .t{color:var(--amber)}
+  .tip.bad{background:var(--red-bg); border-color:var(--red-line); color:#7d2b20}
+  .tip.bad .t{color:var(--red)}
+  .tip.good{background:var(--green-bg); border-color:var(--green-line); color:#0b5f45}
+  .tip.good .t{color:var(--green)}
+
+  /* ---------- 小结 ---------- */
+  .sec-title{
+    font-size:12px; letter-spacing:.14em; font-weight:700; color:var(--ink-3);
+    margin:40px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--line);
+  }
+  .note{color:var(--ink-2); font-size:14px}
+  .note ul{padding-left:20px; margin:10px 0}
+  .note li{margin-bottom:6px}
+  footer{margin-top:46px; font-size:12.5px; color:var(--ink-3); text-align:center}
+
+  @media (max-width:640px){
+    .wrap{padding:26px 15px 60px}
+    h1{font-size:23px}
+    .step{padding:19px 17px}
+    .step-h h2{font-size:17px}
+    table{min-width:460px}
+    th,td{padding:8px 9px; font-size:13px}
+  }
+  @media print{
+    body{background:#fff}
+    .fill{display:none}
+    .step,.lead{box-shadow:none; break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">知了诊所 · 部署运维</div>
+    <h1>把你在阿里云买的域名，指到 Vercel 上的知了诊所</h1>
+    <p class="sub">照着从上往下做，四步。全程不需要写代码，也不需要改 DNS 服务器。</p>
+    <div class="meta">目标平台：Vercel ｜ 域名解析：阿里云云解析 DNS ｜ 更新：2026-09-13</div>
+  </header>
+
+  <div class="fill">
+    <label>① 先把你的域名填在这里（下面所有步骤会自动替换）</label>
+    <div class="fill-row">
+      <input id="d" type="text" placeholder="例如 zhiliaozhensuo.com" autocomplete="off" spellcheck="false">
+    </div>
+    <p class="hint">只填域名本身，<b>不要</b>带 <code>https://</code>、不要带 <code>www.</code>、不要带结尾的斜杠。填不对后面就是白做，所以先填这里。</p>
+  </div>
+
+  <div id="doc">
+
+  <div class="tip bad">
+    <div class="t">🚧 前置条件：阿里云账号必须先完成「账号实名认证」</div>
+    <p>阿里云官方规定（依据《反电信网络诈骗法》，2024-01-23 起生效）：<b>未完成账号实名认证的阿里云账号，无法新增或修改域名解析记录</b>。</p>
+    <p>这一条<b>网页控制台和 API 都会被拒</b>，换 AccessKey、换授权方式都绕不过去。报错是 <code>Identity.Uncertified</code>。</p>
+    <p>注意：「域名实名认证」和「账号实名认证」是两件事 —— 域名认证过了也没用，卡的是账号。</p>
+    <p><b>解决：</b>阿里云控制台 → 账号中心 → 实名认证。个人认证走支付宝通常秒过，完成后回来继续。</p>
+    <p class="sub" style="margin-top:8px">排查方法：<code>yeing.online</code> 在 <code>dns31/dns32.hichina.com</code> 上一条 A/CNAME 记录都没有，就是这个限制的直接结果。</p>
+  </div>
+
+  <div class="lead">
+    <p>你给我的 <b>dns31.hichina.com / dns32.hichina.com</b>，是阿里云默认的 DNS 服务器地址。</p>
+    <p>它不代表任何要填进输入框的记录值，只说明一件事：<b>你这个域名的解析权在阿里云</b>。所以你哪儿都不用搬家，直接去阿里云「云解析 DNS」加两条记录就行。</p>
+    <p>同理，<b>不要</b>去 Vercel 选「把 DNS 交给 Vercel 托管（Nameservers）」，那会把你的域名服务器改掉，多一个出错环节，没有任何好处。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-h">
+      <div class="num">1</div>
+      <div>
+        <h2>在 Vercel 里把域名加进去
+          <span class="where">Vercel 控制台 → 你的项目 → 顶部 Settings → 左侧 Domains</span>
+        </h2>
+      </div>
+    </div>
+    <ol>
+      <li>在 <b>Add Domain</b> 输入框里填 <code>www.{{DOMAIN}}</code>，点 <b>Add</b>。</li>
+      <li>再加一次，这次填 <code>{{DOMAIN}}</code>（不带 www 的根域名），点 <b>Add</b>。</li>
+      <li>加完两个后，Vercel 会问你哪个是主域名。选 <b>www 为主域名</b>，让根域名 301 跳转到 www。</li>
+    </ol>
+    <p>为什么先加 www？因为只有子域名能用 CNAME 记录，而 CNAME 才是国内访问最稳的那一种。根域名只能用 A 记录，路由更死板。</p>
+
+    <div class="tip warn">
+      <div class="t">这一步会显示红色报错，是正常的</div>
+      <p>加完域名，Vercel 会显示 <b>Invalid Configuration</b>，并且列出它要你配置的 DNS 记录值。这一步的报错不用管，做完第 2 步它自己会变绿。</p>
+      <p><b>但请把那张域名卡片上的两个值抄下来或截图</b>，尤其是 A 记录的 IP —— 它是你这一个项目专属的，别人的教程里的值不一定是你的。</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-h">
+      <div class="num">2</div>
+      <div>
+        <h2>在阿里云云解析 DNS 添加两条记录
+          <span class="where">阿里云控制台 → 搜索「云解析 DNS」→ 域名列表 → 你域名右侧的「解析设置」→ 添加记录</span>
+        </h2>
+      </div>
+    </div>
+    <p>一共加三条（A 记录要两条）。字段对照如下，照着填：</p>
+    <div class="tbl">
+    <table>
+      <thead>
+        <tr>
+          <th>记录类型</th><th>主机记录</th><th>记录值</th><th>TTL</th><th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="need">
+          <td><code>CNAME</code></td>
+          <td><code>www</code></td>
+          <td><code>1ef7e654b609fb83.vercel-dns-017.com</code></td>
+          <td>10 分钟</td>
+          <td>项目专属值，<b>必加</b></td>
+        </tr>
+        <tr class="need">
+          <td><code>A</code></td>
+          <td><code>@</code></td>
+          <td><code>216.198.79.1</code></td>
+          <td>10 分钟</td>
+          <td rowspan="2">两条都要加，Vercel 按项目分配，<b>缺一条验证不过</b></td>
+        </tr>
+        <tr class="need">
+          <td><code>A</code></td>
+          <td><code>@</code></td>
+          <td><code>64.29.17.1</code></td>
+          <td>10 分钟</td>
+        </tr>
+        <tr class="skip">
+          <td colspan="5">不用加：AAAA（IPv6）、CAA、以及任何一条 Vercel 没要求的记录。IPv6 记录会干扰 Vercel 签证书。</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="tip warn">
+      <div class="t">这三个值是怎么来的？别抄教程</div>
+      <p>它们来自你在 Vercel 上的<b>真实项目</b>，不是通用值：</p>
+      <div class="copy">
+        <code data-copy="vercel domains verify yeing.online">vercel domains verify yeing.online</code>
+        <button type="button" data-copybtn>复制</button>
+      </div>
+      <div class="copy">
+        <code data-copy="vercel domains verify www.yeing.online">vercel domains verify www.yeing.online</code>
+        <button type="button" data-copybtn>复制</button>
+      </div>
+      <p>网上教程普遍写的 <code>76.76.21.21</code> 和 <code>cname.vercel-dns.com</code> <b>对这个项目是错的</b> ——
+         实测本项目的 A 记录是 <code>216.198.79.1</code> 和 <code>64.29.17.1</code>，CNAME 目标也是一串项目专属哈希。
+         用通用值会导致 Vercel 永远停在 <b>Invalid Configuration</b>。</p>
+    </div>
+
+    <p>这条 CNAME 的值可以直接复制：</p>
+    <div class="copy">
+      <code data-copy="1ef7e654b609fb83.vercel-dns-017.com">1ef7e654b609fb83.vercel-dns-017.com</code>
+      <button type="button" data-copybtn>复制</button>
+    </div>
+
+    <div class="tip bad">
+      <div class="t">加之前，先把冲突的旧记录删掉</div>
+      <p>如果主机记录 <code>www</code> 或 <code>@</code> 上已经有别的 A / CNAME 记录（阿里云买域名后常会自带一条停放页记录），<b>先删掉再新增</b>。新旧记录并存会导致流量随机分流，Vercel 会一直验证不过。</p>
+    </div>
+
+    <div class="tip warn">
+      <div class="t">主机记录只填前缀，不要填完整域名</div>
+      <p>加 www 时，主机记录填 <code>www</code>，<b>不要</b>填 <code>www.{{DOMAIN}}</code>。加根域名时填 <code>@</code>，不要留空、不要填域名本身。</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-h">
+      <div class="num">3</div>
+      <div>
+        <h2>回 Vercel 等它变绿
+          <span class="where">Vercel → Settings → Domains</span>
+        </h2>
+      </div>
+    </div>
+    <ol>
+      <li>回到 Domains 页面，如果状态还没更新，点一下域名卡片上的 <b>Refresh</b>。</li>
+      <li>等 1 到 10 分钟。两个域名都显示绿色对勾、<b>Valid Configuration</b>，就成功了。</li>
+      <li>Vercel 会自动签发 HTTPS 证书，不用你操作。证书签发通常再等几分钟。</li>
+    </ol>
+    <p>变绿之后，你的站点地址就是 <code>https://www.{{DOMAIN}}</code>。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-h">
+      <div class="num">4</div>
+      <div>
+        <h2>验证真的通了
+          <span class="where">浏览器 + 一个查解析的网站</span>
+        </h2>
+      </div>
+    </div>
+    <ol>
+      <li>浏览器打开 <code>https://www.{{DOMAIN}}</code>，确认地址栏有小锁、页面正常。</li>
+      <li>打开 <code>https://{{DOMAIN}}</code>，确认它会自动跳到带 www 的地址。</li>
+      <li>用手机 4G／5G 流量（关掉 Wi-Fi）再打开一次 —— <b>这一步最关键</b>，评委多半就是这么点开的。</li>
+    </ol>
+    <p>想知道解析到底生效没有，去 <b>dnschecker.org</b>，输入 <code>www.{{DOMAIN}}</code>，看世界各地是否都解析到 Vercel 的 IP。中国节点显示的结果，基本就是你国内用户会遇到的实际情况。</p>
+  </div>
+
+  <div class="sec-title">方式二：让命令行替你配（推荐）</div>
+  <div class="step">
+    <div class="step-h">
+      <div class="num alt">CLI</div>
+      <div>
+        <h2>不用手点控制台，一条命令配完并自动复核
+          <span class="where">已装好：aliyun CLI v3.5.0 → ~/.local/bin/aliyun</span>
+        </h2>
+      </div>
+    </div>
+    <p>仓库里已经备好脚本 <code>tools/aliyun-dns-setup.sh</code>。它会先读一遍你域名上现有的记录、
+       算出「要删哪条、要加哪条」，再动手，最后重新读一遍服务端做复核。</p>
+
+    <p><b>为什么值得用这条：</b>它能替你处理最容易出事的一步 —— 清理旧记录。
+       阿里云买域名后常自带停放页记录，多条 A 记录并存会让 Vercel 验证永远不通过。
+       而这个脚本<b>只清理 A 和 CNAME，绝不碰 MX、TXT、NS</b>（<code>@</code> 上常有邮箱记录，误删就收不到邮件）。</p>
+
+    <p>默认<b>只看不写</b>，确认无误才加 <code>--apply</code>：</p>
+    <div class="copy">
+      <code data-copy="bash tools/aliyun-dns-setup.sh yeing.online --apex-ip 216.198.79.1 --apex-ip 64.29.17.1">bash tools/aliyun-dns-setup.sh yeing.online --apex-ip 216.198.79.1 --apex-ip 64.29.17.1</code>
+      <button type="button" data-copybtn>复制</button>
+    </div>
+    <div class="copy">
+      <code data-copy="bash tools/aliyun-dns-setup.sh yeing.online --apex-ip 216.198.79.1 --apex-ip 64.29.17.1 --apply">bash tools/aliyun-dns-setup.sh yeing.online --apex-ip 216.198.79.1 --apex-ip 64.29.17.1 --apply</code>
+      <button type="button" data-copybtn>复制</button>
+    </div>
+
+    <div class="tip warn">
+      <div class="t">用这条之前，先授权一次</div>
+      <p>命令行要能代表你的账号操作，必须先授权。推荐用 <b>OAuth 扫码登录</b>（官方推荐方式），
+         不用创建 AccessKey、不留长期密钥：</p>
+      <div class="copy">
+        <code data-copy="aliyun configure --profile zhihu --mode OAuth">aliyun configure --profile zhihu --mode OAuth</code>
+        <button type="button" data-copybtn>复制</button>
+      </div>
+      <p>跑完会打开浏览器让你登录阿里云并确认授权。授权后凭据只存在本机，随时可以用
+         <code>aliyun configure delete --profile zhihu</code> 撤销。</p>
+    </div>
+
+    <div class="tip good">
+      <div class="t">已用假凭证测过，不会误删</div>
+      <p>三种场景都验过：① 混着 MX / TXT / 冲突 A 记录时，只删该删的两条，邮箱记录毫发无损；
+         ② 只有一条过时 A 记录时，删旧加新；③ 已经配好时，<b>零改动</b>，不会重复添加。</p>
+    </div>
+  </div>
+
+  <div class="sec-title">必须提前知道的一个风险</div>
+  <div class="tip bad">
+    <div class="t">Vercel 在中国大陆没有节点，国内访问不保证通</div>
+    <p>这不是你配错了，是 Vercel 的固有限制：它在中国大陆没有服务器和 CDN 节点，官方也明确说不保证大陆地区的可用性。</p>
+    <p>网上流传的「国内优化 CNAME」（<code>cname-china.vercel-dns.com</code>）是民间偏方：
+       它确实能绕开一部分 DNS 污染，但 Vercel 的域名验证是按<b>项目专属目标</b>校验的，
+       换成偏方值很可能永远验证不过。先用 Vercel 指定的值跑通，再谈优化。</p>
+    <p><b>所以给你的实际建议：</b>这个比赛面向国内评委，别把希望全押在域名上。提交时把两个地址都给出去 —— 主推域名，同时附上那个手机能直接打开的演示链接作为兜底。评委点哪个都能看到东西。</p>
+    <p>真要彻底解决，只有换国内节点托管（阿里云 OSS + CDN），但那个必须走 ICP 备案，周期以周计，现在来不及。</p>
+  </div>
+
+  <div class="tip good">
+    <div class="t">好消息：不需要备案</div>
+    <p>备案只管「服务器在中国大陆境内」的情况。Vercel 在境外，所以你现在这条路<b>不需要 ICP 备案</b>，买完域名就能配。前提是域名本身完成了实名认证（阿里云新域名一般已经自动完成，没完成的话控制台会提示）。</p>
+  </div>
+
+  <div class="sec-title">报错对照表</div>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>你看到的现象</th><th>真正的原因</th><th>怎么修</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Vercel 一直 <b>Invalid Configuration</b></td>
+        <td>旧记录没删，或记录值填错</td>
+        <td>回到第 2 步，删掉 <code>www</code> / <code>@</code> 上的其他 A、CNAME 记录，只留手册里这两条</td>
+      </tr>
+      <tr>
+        <td>解析查得到，但浏览器打不开</td>
+        <td>刚改完，还没到生效时间</td>
+        <td>等 10 分钟再试；阿里云 TTL 最短就是 10 分钟，急不来</td>
+      </tr>
+      <tr>
+        <td>能打开但提示「不安全」</td>
+        <td>证书还在签发</td>
+        <td>再等几分钟；仍不行就在 Vercel 里把域名删掉重新 Add 一次</td>
+      </tr>
+      <tr>
+        <td>国内打不开，挂梯子就正常</td>
+        <td>大陆网络对 Vercel 的限制</td>
+        <td>没有一键解决方案。先确认记录值用的是 Vercel 指定的（见第 2 步），然后用兜底链接</td>
+      </tr>
+      <tr>
+        <td>域名被暂停 / serverHold</td>
+        <td>阿里云域名没做实名认证</td>
+        <td>去阿里云域名控制台完成实名认证，认证过后解析才会通</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec-title">三件不要做的事</div>
+  <div class="note">
+    <ul>
+      <li><b>不要改 DNS 服务器。</b>dns31 / dns32 保持原样。换成 Vercel 的 nameserver 只会让流程更长、更易出错。</li>
+      <li><b>不要抄网上的「Vercel 国内优化 IP」。</b>那些 IP（比如 76.227.x.x 之类）来源不明，Vercel 验证要求记录值和你的域名卡片完全一致，抄错的直接判不通过。</li>
+      <li><b>不要为了加速去套 Cloudflare 再开橙色云朵。</b>橙云会隐藏真实解析，Vercel 验证期一定失败。这条路要配也得先用灰云验证通过再说，不值得现在折腾。</li>
+    </ul>
+  </div>
+
+  </div>
+
+  </div>
+
+  <footer>知了诊所 · 知乎 AI 黑客松 2026 参赛作品 ｜ 本手册随仓库一起保存，可在浏览器里直接打开</footer>
+
+</div>
+
+<script>
+(function(){
+  var doc = document.getElementById('doc');
+  var input = document.getElementById('d');
+  if(!doc || !input) return;
+
+  // 先把模板存下来，之后每次重绘都从模板出发
+  var tpl = doc.innerHTML;
+
+  function render(){
+    var v = (input.value || '').trim()
+              .replace(/^https?:\/\//i, '')
+              .replace(/\/+$/, '')
+              .replace(/^www\./i, '');
+    var shown = v || '你的域名';
+    doc.innerHTML = tpl.split('{{DOMAIN}}').join(shown);
+  }
+
+  input.addEventListener('input', render);
+  input.addEventListener('change', render);
+
+  // 事件委托，重渲染后依然有效
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-copybtn]');
+    if(!btn) return;
+    var box = btn.closest('.copy');
+    var code = box ? box.querySelector('[data-copy]') : null;
+    if(!code) return;
+    var text = code.getAttribute('data-copy') || code.textContent.trim();
+    var done = function(){
+      btn.textContent = '已复制';
+      btn.classList.add('ok');
+      setTimeout(function(){ btn.textContent = '复制'; btn.classList.remove('ok'); }, 1600);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  });
+
+  function fallback(text, done){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); } catch(err) { /* 静默失败，不假装成功 */ }
+    document.body.removeChild(ta);
+  }
+})();
+</script>
+</body>
+</html>
