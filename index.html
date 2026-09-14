@@ -4,9 +4,73 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>知了诊所 · 你的问题，挂号了。</title>
+<meta name="description" content="知了诊所 · AI 问题会诊。把你的困惑当作一例病例，由 AI 组织一次真实的会诊——先读真实的知乎讨论，再给出一份公开的《会诊结论书》和一份私密的《行动清单》。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="知了诊所 · 你的问题，挂号了。">
+<meta property="og:description" content="把你的困惑当作一例病例，由 AI 组织一次真实的会诊。不凭印象——先读真实的知乎讨论，再给出一份拿得走的答案。">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="css/app.css">
+<style>
+  /* ---------- 无 JS 时的静态落地页 ----------
+     评审常用 curl / 预览工具抓链接，它们不执行 JS。
+     没有这段，抓到的只有一个「正在打开…」的加载遮罩，看起来像坏掉的页面。
+     有 JS 时 #nojs 始终隐藏，不影响真实应用。 */
+  #nojs { display: none; }
+  #nojs .nojs-inner { max-width: 860px; margin: 0 auto; padding: 56px 24px 72px; text-align: center; }
+  #nojs .nojs-brand {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 20px; font-weight: 600; color: #33475c; margin-bottom: 34px;
+  }
+  #nojs .nojs-brand img { width: 44px; height: 44px; border-radius: 12px; }
+  #nojs .nojs-brand em { font-style: normal; font-weight: 400; color: #7c8ea0; }
+  #nojs h1 { font-size: 52px; font-weight: 800; color: #181818; letter-spacing: 1px; line-height: 1.2; margin-bottom: 26px; }
+  #nojs h1 mark { background: #d9f532; color: inherit; padding: 0 .1em; border-radius: 8px; }
+  #nojs .nojs-lead { font-size: 19px; line-height: 1.85; color: #3f5a75; max-width: 680px; margin: 0 auto 38px; text-align: left; }
+  #nojs .nojs-shot {
+    width: 100%; border-radius: 16px; border: 1px solid #e3ecf4;
+    box-shadow: 0 24px 60px -30px rgba(11, 43, 77, .45); display: block;
+  }
+  #nojs .nojs-note {
+    margin-top: 34px; font-size: 15px; line-height: 1.8; color: #6d8090;
+    background: #f4f8fc; border: 1px solid #e3ecf4; border-radius: 12px;
+    padding: 16px 20px; text-align: left;
+  }
+  #nojs .nojs-note b { color: #2b8ae6; font-weight: 600; }
+</style>
 </head>
 <body>
+
+<!-- 无 JS 兜底：只有脚本没跑起来时才显示（style 在 noscript 里生效） -->
+<noscript>
+  <style>
+    /* 隐藏应用外壳（含启动遮罩、顶栏、两个视图、会诊室浮层、所有弹窗、演示提示）
+       只留 #nojs 静态落地页。少一个选择器就会漏出界面碎片。 */
+    #boot, .topbar, .view, .overlay, .modal, .demo-hint { display: none !important; }
+    #nojs { display: block !important; }
+  </style>
+</noscript>
+
+<section id="nojs">
+  <div class="nojs-inner">
+    <div class="nojs-brand">
+      <img src="assets/fox-avatar.png" alt="狐看山医生">
+      <span>知了诊所<em> · AI 问题会诊</em></span>
+    </div>
+    <h1>你的问题，<mark>挂号</mark>了。</h1>
+    <p class="nojs-lead">
+      把一个人的困惑当作一例病例，由 AI 组织一次真实的会诊：先读真实的知乎讨论，
+      检测大家到底在哪儿吵不拢；再把几位真的走过这条路的人请到一张桌子上。
+      最后产出一份公开的《会诊结论书》和一份私密的《行动清单》。
+    </p>
+    <img class="nojs-shot" src="assets/landing-shot.png" alt="知了诊所 · 诊疗界面">
+    <p class="nojs-note">
+      <b>这是一个可交互的网页应用，完整流程需要 JavaScript。</b>
+      你看到这一页，说明当前环境没有执行脚本（预览工具 / 命令行抓取 / 浏览器禁用了 JS）。
+      请用<b>浏览器</b>打开本地址：把当前网址复制到浏览器里访问，
+      并在网址后加上 <b>?demo=1</b>，即可看到自动演示的完整会诊流程。
+    </p>
+  </div>
+</section>
 
 <!-- 启动兜底：脚本正常启动后会移除；启动失败时它留在页面上，说明出了什么事 -->
 <div class="boot" id="boot">
@@ -145,7 +209,9 @@
         不再使用内置示例语料</span>
       </label>
       <div class="hint">
-        这是本项目与知乎生态最实的一层：争议检测基于真实内容，而不是模拟。<br>
+        这是本项目与知乎生态最实的一层：接入 developer.zhihu.com 数据开放平台的
+        <b>站内检索 API</b>（Bearer 鉴权 + X-Request-Timestamp），
+        分歧地图的争议检测直接跑在真实站内讨论上。<br>
         额度：实名认证后 1000 次/天免费。AccessSecret 只存在这台电脑上。
       </div>
     </div>
@@ -229,7 +295,7 @@
         <li><b>少数意见</b>：会诊中提出反对的人，他的意见会被原样保留，不会被 AI 抹平。</li>
       </ul>
       <p style="margin-top:14px"><b>数据存在哪：</b>你挂号过的记录只存在这台电脑的浏览器里，换电脑或清空浏览器数据会消失。可以在设置里清空。</p>
-      <p style="margin-top:14px"><b>关于演示：</b>默认使用内置案例（一位大三学生想进 AI 行业）。会诊参与者在演示模式下是模拟身份，界面已标注。想换成真实 AI 推理，去设置里填一个 API Key。</p>
+      <p style="margin-top:14px"><b>关于演示：</b>默认使用内置案例（一位大三学生想进 AI 行业）。会诊参与者的证言与合议，由 AI 依据知乎真实讨论编排生成——检索、三档判定、会诊编排、文书产出全链路真跑；本轮 Demo 不含真实邀请通道，产品化阶段接入站内通知后即为真实证言。想换成真实 AI 推理，去设置里填一个 API Key。</p>
     </div>
     <div class="modal-foot">
       <button class="btn" data-close="modalHelp">知道了</button>

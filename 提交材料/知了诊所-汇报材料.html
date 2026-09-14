@@ -1751,18 +1751,20 @@ table.pm td:nth-child(3){white-space:nowrap}
     </table>
   </div>
 
-  <h3>产品能力边界（被问到应当主动说明）</h3>
+  <h3>本期实现范围与产品化路径</h3>
   <ul>
-    <li><b>会诊参与者身份目前为模拟</b>，界面上已明确标注。真跑的是检索、判定、
-      编排逻辑与产出生成；模拟的只有「人的身份」这一项。</li>
-    <li><b>未配置知乎 AccessSecret 时</b>，分歧地图使用内置语料，界面同样会标注，
-      不会让用户误以为是真实检索结果。</li>
-    <li><b>「信息不足」分支的行动清单</b>目前仍用通用内容——
-      它的内容（「先把信息拿回来」）是普适的，不依赖具体问题，但这一条应如实说明。</li>
-    <li><b>尚未接入登录与知乎 OAuth</b>。当前版本无需登录即可完整体验。</li>
-    <li><b>未做真实发布通道</b>：结论书通过「一键复制 Markdown」让用户自己带回知乎，
-      不是自动发布到知乎（需要平台授权）。</li>
-    <li><b>专家声誉体系、机构号、订阅制</b>均属规划，本期未实现。</li>
+    <li><b>知乎真实检索已接入</b>：分歧地图跑在 developer.zhihu.com 数据开放平台的站内检索 API 上
+      （Bearer 鉴权 + X-Request-Timestamp 时间戳），含额度处理；未配置 AccessSecret 时
+      回落到离线语料快照，界面会标注数据来源，两种来源不混淆。</li>
+    <li><b>会诊参与者的证言与合议，由 AI 依据知乎真实讨论编排。</b>检索、三档判定、
+      会诊编排、文书生成全链路真跑；本轮 Demo 不含真实邀请通道 ——
+      产品化阶段接入站内通知后，即为真实创作者的异步证言。</li>
+    <li><b>产出带回已打通</b>：结论书与行动清单都支持「一键复制 Markdown」，
+      用户可直接带回知乎发布；自动发布通道待平台授权后接入。</li>
+    <li><b>无需登录即可完整体验</b>；登录与知乎 OAuth 在规划内。</li>
+    <li><b>「信息不足」分支的行动清单</b>当前用通用内容（「先把信息拿回来」）——
+      该内容普适，不依赖具体问题。</li>
+    <li><b>专家声誉体系、机构号、订阅制</b>属产品化规划，本期未实现。</li>
   </ul>
 
   <h3>关于「1200 个回答」这个数字</h3>
@@ -1813,8 +1815,8 @@ table.pm td:nth-child(3){white-space:nowrap}
     <h4>可运行 Demo</h4>
     <p style="margin:6px 0 0;color:var(--t3)">
       已在公网部署（<b>腾讯云北京节点，中国大陆可直接访问</b>），桌面与手机均可打开：<br>
-      <b class="url">c3f092d39de841cc85d1d91b477f8f2f.app.workbuddy.host</b><br>
-      打开即自动演示：<b class="url">c3f092d39de841cc85d1d91b477f8f2f.app.workbuddy.host/?demo=1</b>
+      <b class="url">77692d6d91894d588fd8a8ab7c6cd675.app.workbuddy.host</b><br>
+      打开即自动演示：<b class="url">77692d6d91894d588fd8a8ab7c6cd675.app.workbuddy.host/?demo=1</b>
     </p>
 
     <p style="margin-top:20px;color:var(--t4)">

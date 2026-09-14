@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --hl:#d9f532; --ink:#181818; --blue:#0084ff; --paper:#ffffff; }
+  body{
+    width:1920px; height:1080px; overflow:hidden; position:relative;
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:#fff;
+  }
+  .bg{ position:absolute; inset:0; width:1920px; height:1080px; object-fit:cover; }
+  .ov{ position:absolute; inset:0; }
+
+  /* ---------- 左侧标题面板 ---------- */
+  .panel{
+    position:absolute; left:0; top:0; width:820px; height:1080px;
+    background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);
+    box-shadow:24px 0 60px -30px rgba(30,50,70,.35);
+  }
+  .brand{ position:absolute; left:64px; top:58px; display:flex; align-items:center; gap:14px; font-size:21px; font-weight:600; color:#33475c; }
+  .brand img{ width:46px; height:46px; border-radius:13px; box-shadow:0 4px 12px rgba(0,0,0,.14); }
+  .brand .sub{ font-weight:400; color:#7c8ea0; }
+
+  .title{ position:absolute; left:64px; top:150px; color:var(--ink); font-weight:800; letter-spacing:1px; line-height:1.14; }
+  .title .l1{ font-size:82px; }
+  .title .l2{ font-size:112px; margin-top:8px; }
+  .hl{ position:relative; display:inline-block; padding:0 .1em; }
+  .hl::before{
+    content:''; position:absolute; left:-.06em; right:-.06em; top:.14em; bottom:0;
+    background:var(--hl); border-radius:12px; transform:rotate(-1.3deg); z-index:0;
+    box-shadow:0 5px 0 rgba(0,0,0,.05);
+  }
+  .hl em{ position:relative; z-index:1; font-style:normal; }
+  .subtitle{ position:absolute; left:66px; top:520px; font-family:"Kaiti SC","STKaiti",serif; font-size:32px; color:#4a5a68; }
+  .feats{ position:absolute; left:66px; top:592px; }
+  .feats .ft{ display:flex; align-items:center; gap:11px; font-size:22px; color:#5b748e; margin-bottom:15px; }
+  .feats .ft i{ width:10px; height:10px; border-radius:50%; background:var(--blue); flex:0 0 auto; }
+
+  .qrbox{
+    position:absolute; left:64px; bottom:64px; display:flex; align-items:center; gap:18px;
+    background:var(--paper); border-radius:20px; padding:18px 22px;
+    box-shadow:0 16px 38px -14px rgba(30,50,70,.3); border:1px solid rgba(220,230,238,.9);
+  }
+  .qrbox img{ width:128px; height:128px; border-radius:10px; }
+  .qrbox .cta{ display:inline-block; background:var(--hl); color:var(--ink); font-weight:800; font-size:25px; padding:15px 26px; border-radius:14px; letter-spacing:1px; }
+  .qrbox .hint{ font-size:17px; color:#6d8090; margin-top:11px; line-height:1.45; }
+
+  .badge{ position:absolute; left:66px; bottom:24px; font-family:"Kaiti SC","STKaiti",serif; font-size:17px; color:#9aa8b4; }
+
+  /* ---------- 右侧：悬浮卡 ---------- */
+  .card{
+    position:absolute; background:var(--paper); border-radius:20px; overflow:hidden;
+    box-shadow:0 22px 46px -16px rgba(30,50,70,.45), 0 3px 10px rgba(30,50,70,.14);
+    border:1px solid rgba(220,230,238,.9);
+  }
+  .card img{ display:block; width:100%; height:auto; }
+  .c1{ left:860px;  top:738px; width:250px; transform:rotate(-6deg); z-index:3; }
+  .c2{ left:1136px; top:700px; width:238px; transform:rotate(2.5deg); z-index:4; }
+  .c3{ left:1398px; top:740px; width:250px; transform:rotate(6.5deg); z-index:3; }
+
+  /* 手写标注 */
+  .hand{ font-family:"Kaiti SC","STKaiti",serif; color:#2c3a46; }
+  .note{ position:absolute; font-size:23px; white-space:nowrap; text-shadow:0 1px 0 rgba(255,255,255,.8); }
+  .n1{ left:884px; top:688px; transform:rotate(-4deg); }
+  .n2{ left:1152px; top:652px; transform:rotate(2deg); }
+  .n3{ left:1420px; top:690px; transform:rotate(4deg); }
+  .note .dot{ display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--blue); margin-right:7px; vertical-align:2px; }
+
+  /* 便利贴 */
+  .sticky{
+    position:absolute; left:1560px; top:150px; width:216px; padding:17px 18px 15px;
+    background:linear-gradient(180deg,#fff8c9,#fff3a6); border-radius:4px;
+    box-shadow:0 12px 24px -8px rgba(120,110,40,.45); transform:rotate(5deg);
+    font-family:"Kaiti SC","STKaiti",serif; font-size:21px; color:#5a5320; line-height:1.5; z-index:5;
+  }
+  .sticky::before{
+    content:''; position:absolute; left:50%; top:-10px; width:58px; height:19px; margin-left:-29px;
+    background:rgba(217,245,50,.78); border-radius:3px; transform:rotate(-3deg);
+    box-shadow:0 2px 4px rgba(0,0,0,.08);
+  }
+
+  /* 狐狸贴纸 */
+  .fox{ position:absolute; }
+  .fox img{ display:block; width:100%; height:auto; filter:drop-shadow(0 9px 15px rgba(30,50,70,.24)); }
+  .f1{ left:1596px; top:44px; width:160px; transform:rotate(7deg); z-index:6; }
+  .f2{ left:716px; top:430px; width:150px; transform:rotate(-8deg); z-index:6; }
+  .f3{ left:690px; top:900px; width:158px; transform:rotate(-9deg); z-index:6; }
+  .f4{ left:1706px; top:846px; width:126px; transform:rotate(9deg); z-index:6; }
+</style></head>
+<body>
+  <img class="bg" src="./base-l.png">
+
+  <div class="panel"></div>
+
+  <div class="ov">
+    <div class="brand">
+      <img src="./brand.png">
+      <span>知了诊所 <span class="sub">· AI 问题会诊</span></span>
+    </div>
+
+    <div class="title">
+      <div class="l1">你的问题，</div>
+      <div class="l2"><span class="hl"><em>挂号</em></span>了。</div>
+    </div>
+    <div class="subtitle">每一个困惑，都值得一次认真会诊</div>
+
+    <div class="feats">
+      <div class="ft"><i></i>不凭印象，先读真实的知乎讨论</div>
+      <div class="ft"><i></i>公开《会诊结论书》· 私密《行动清单》</div>
+      <div class="ft"><i></i>少数意见保留，不由 AI 抹平</div>
+    </div>
+
+    <div class="qrbox">
+      <img src="./qr.png">
+      <div>
+        <span class="cta">扫码体验</span>
+        <div class="hint">打开即自动演示<br>约 90 秒看完全流程</div>
+      </div>
+    </div>
+    <div class="badge">知乎 AI 黑客松 2026 · 知识炼金场</div>
+
+    <!-- 手写标注 -->
+    <div class="note hand n1"><span class="dot"></span>病历首页</div>
+    <div class="note hand n2"><span class="dot"></span>分歧地图</div>
+    <div class="note hand n3"><span class="dot"></span>会诊结论书</div>
+
+    <!-- 三张悬浮卡 -->
+    <div class="card c1"><img src="./ui/chart.png"></div>
+    <div class="card c2"><img src="./ui/map.png"></div>
+    <div class="card c3"><img src="./ui/concl.png"></div>
+
+    <!-- 便利贴 -->
+    <div class="sticky">AI 不替你下结论，<br>只帮你把分歧<br>摆清楚。</div>
+
+    <!-- 狐狸贴纸 -->
+    <div class="fox f1"><img src="./fox/wow.png"></div>
+    <div class="fox f2"><img src="./fox/good.png"></div>
+    <div class="fox f3"><img src="./fox/wave.png"></div>
+    <div class="fox f4"><img src="./fox/think.png"></div>
+  </div>
+</body></html>

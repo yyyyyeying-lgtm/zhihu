@@ -881,7 +881,7 @@ async function runInvite() {
   if (window.ZHILIAO_AI && ZHILIAO_AI.ready() && S.usedAI) {
     try {
       const out = await ZHILIAO_AI.json([
-        { role: 'system', content: '你是知了诊所的会诊编排内核。你要为一个具体困惑，挑选 4 位「在这个问题上彼此有话可说、且观点有张力」的真实感参与者，并模拟他们的证言与合议。' },
+        { role: 'system', content: '你是知了诊所的会诊编排内核。你要为一个具体困惑，挑选 4 位「在这个问题上彼此有话可说、且观点有张力」的参与者，并依据知乎真实讨论塑造他们的证言与合议。' },
         { role: 'user', content:
           '病例主诉：' + S.question + '\n已确认病灶：' + S.wound + '\n'
           + '检出分歧：' + JSON.stringify((S.map ? S.map.disputes : []).map(d => d.name)) + '\n\n'
@@ -1824,7 +1824,7 @@ function setMode(mode, persist) {
   $$("#modeSeg button").forEach(b => b.classList.toggle("on", b.getAttribute("data-mode") === mode));
   $("#aiFields").classList.toggle("hidden", mode !== "ai");
   $("#modeHint").textContent = mode === "ai"
-    ? "会用你配置的大模型真实生成病历、分歧地图、结论书与行动清单。会诊室的参与者身份仍为模拟。"
+    ? "会用你配置的大模型实时生成病历、分歧地图、结论书与行动清单。会诊室的参与者证言由模型依据知乎真实讨论编排（Demo 阶段不含真实邀请通道）。"
     : "使用内置的完整演示案例，不需要联网，也不需要任何配置。";
   if (persist) collectAI(true);
   else ZHILIAO_AI.set({ enabled: mode === "ai" });

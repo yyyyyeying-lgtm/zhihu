@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<title>知了诊所 · 视觉规范与界面截图</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --blue:#0084ff; --blue-dark:#0070dd; --blue-light:#e8f3ff; --blue-border:#cce4ff;
+    --bg:#f6f7f9; --card:#fff; --border:#ebedf0; --border-strong:#dfe2e8;
+    --t1:#121212; --t2:#646464; --t3:#9aa3af;
+    --red:#f1403c; --green:#00b96b; --amber:#ff9607; --teal:#0f6e56;
+    --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    --mono:"SF Mono","Menlo","Consolas",monospace;
+  }
+  body{ font-family:var(--font); background:var(--bg); color:var(--t1); padding:48px 28px 80px; }
+  .page{ max-width:1000px; margin:0 auto; }
+  h1{ font-size:32px; font-weight:800; letter-spacing:-.5px; }
+  h1 span{ color:var(--blue); }
+  .lede{ margin-top:12px; color:var(--t2); font-size:15.5px; line-height:1.8; }
+  h2{ font-size:19px; font-weight:700; margin:52px 0 18px; padding-left:12px; border-left:4px solid var(--blue); }
+  .note{ font-size:13.5px; color:var(--t2); line-height:1.8; margin-bottom:20px; }
+
+  /* 色板 */
+  .swatches{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .sw{ background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .sw .chip{ height:64px; }
+  .sw .meta{ padding:11px 13px; }
+  .sw .nm{ font-size:13.5px; font-weight:600; }
+  .sw .hx{ font-family:var(--mono); font-size:12px; color:var(--t3); margin-top:3px; }
+  .sw .use{ font-size:12px; color:var(--t2); margin-top:6px; line-height:1.5; }
+
+  /* 规格表 */
+  table{ width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  th,td{ text-align:left; padding:11px 15px; font-size:13.5px; border-bottom:1px solid var(--border); }
+  th{ background:#f9fafb; font-weight:600; color:var(--t2); font-size:12.5px; }
+  tr:last-child td{ border-bottom:none; }
+  td.k{ color:var(--t2); width:190px; }
+  code{ font-family:var(--mono); font-size:12.5px; background:#f2f4f7; padding:2px 6px; border-radius:5px; }
+
+  /* 截图 */
+  .shot{ background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:26px; box-shadow:0 10px 30px -22px rgba(11,43,77,.5); }
+  .shot img{ display:block; width:100%; }
+  .shot .cap{ padding:16px 20px 18px; border-top:1px solid var(--border); }
+  .shot .cap .t{ font-size:15.5px; font-weight:700; }
+  .shot .cap .d{ font-size:13.5px; color:var(--t2); line-height:1.75; margin-top:7px; }
+  .shot .cap .s{ font-family:var(--mono); font-size:12px; color:var(--blue); margin-top:9px; line-height:1.7; }
+  .shot.room img{ max-height:520px; object-fit:cover; object-position:top; }
+</style></head>
+<body><div class="page">
+
+  <h1>知了诊所 <span>· 视觉规范</span></h1>
+  <p class="lede">
+    界面走「知乎蓝 + 大留白」的克制路线：不做装饰，靠层级、留白与圆角表达秩序感。
+    下面是从 <code>css/app.css</code> 直接提取的设计令牌，以及四张关键界面截图。
+  </p>
+
+  <h2>一、色彩</h2>
+  <p class="note">主色只有一个（知乎蓝），其余颜色只承担「语义」职责，不参与装饰。</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#0084ff"></div><div class="meta">
+      <div class="nm">主色 · 知乎蓝</div><div class="hx">#0084FF</div>
+      <div class="use">主按钮、医生气泡、进度点、链接</div></div></div>
+    <div class="sw"><div class="chip" style="background:#e8f3ff;border-bottom:1px solid #ebedf0"></div><div class="meta">
+      <div class="nm">主色浅底</div><div class="hx">#E8F3FF</div>
+      <div class="use">医生气泡底、选中态、提示块</div></div></div>
+    <div class="sw"><div class="chip" style="background:#121212"></div><div class="meta">
+      <div class="nm">正文黑</div><div class="hx">#121212</div>
+      <div class="use">标题与正文；不用纯黑 #000</div></div></div>
+    <div class="sw"><div class="chip" style="background:#f6f7f9;border-bottom:1px solid #ebedf0"></div><div class="meta">
+      <div class="nm">页面底</div><div class="hx">#F6F7F9</div>
+      <div class="use">页面背景；卡片用纯白拉开层级</div></div></div>
+    <div class="sw"><div class="chip" style="background:#f1403c"></div><div class="meta">
+      <div class="nm">分歧 / 少数意见</div><div class="hx">#F1403C</div>
+      <div class="use">只用于「分歧」与「异议」，不做装饰</div></div></div>
+    <div class="sw"><div class="chip" style="background:#00b96b"></div><div class="meta">
+      <div class="nm">共识 / 成功</div><div class="hx">#00B96B</div>
+      <div class="use">共识结论、已完成</div></div></div>
+    <div class="sw"><div class="chip" style="background:#ff9607"></div><div class="meta">
+      <div class="nm">待确认 / 提醒</div><div class="hx">#FF9607</div>
+      <div class="use">待补充、回访提醒</div></div></div>
+    <div class="sw"><div class="chip" style="background:#0f6e56"></div><div class="meta">
+      <div class="nm">来源 / 引用</div><div class="hx">#0F6E56</div>
+      <div class="use">来源标注，与主色区分</div></div></div>
+  </div>
+
+  <h2>二、字号、圆角与投影</h2>
+  <table>
+    <tr><th>项</th><th>取值</th><th>用在哪</th></tr>
+    <tr><td class="k">字体族</td><td><code>PingFang SC</code> / 系统无衬线</td><td>全站；数字与代码用等宽 <code>SF Mono</code></td></tr>
+    <tr><td class="k">正文</td><td><code>14–14.5px</code> / 行高 <code>1.75</code></td><td>气泡与卡片正文</td></tr>
+    <tr><td class="k">小字</td><td><code>12.5–13.5px</code></td><td>来源标注、副标题、提示</td></tr>
+    <tr><td class="k">标题</td><td><code>16–18px / 600</code></td><td>卡片标题、文书标题</td></tr>
+    <tr><td class="k">圆角</td><td><code>6 / 10 / 14px</code>（小 / 中 / 大）</td><td>按钮 / 输入框 / 卡片</td></tr>
+    <tr><td class="k">投影</td><td><code>0 1px 2px</code> ／ <code>0 4px 16px</code> ／ <code>0 12px 40px</code></td><td>三级层级：静态卡 / 浮起 / 浮层</td></tr>
+    <tr><td class="k">栅格</td><td>内容最大宽 <code>760px</code>，左右留白 <code>20px</code></td><td>正文流；窄屏自动收窄，375px 无横向溢出</td></tr>
+    <tr><td class="k">留白节奏</td><td>气泡间距 <code>15px</code>，卡片内边距 <code>18–22px</code></td><td>「大留白」是这套界面的主要设计手段</td></tr>
+  </table>
+
+  <h2>三、关键界面</h2>
+  <p class="note">四张图分别对应产品的四个核心环节：把话说清楚 → 摸清情况 → 找到分歧 → 给出结论。</p>
+
+  <div class="shot room">
+    <img src="素材/ui/00-会诊室.png" alt="会诊室">
+    <div class="cap">
+      <div class="t">① 会诊室 · 异步证言 + 同步合议</div>
+      <div class="d">左侧是发言流，右侧是正在成形的病历。阶段指示「异步证言 → 同步合议 → 确认草稿」，让「不可能同时在线的人也能参与」这件事在界面上可见。</div>
+      <div class="s">视觉要点：发言用身份色圆点区分｜空话会被当场拦截并打标｜右侧文书随会议实时生成</div>
+    </div>
+  </div>
+
+  <div class="shot">
+    <img src="素材/ui/01-病历首页.png" alt="病历首页">
+    <div class="cap">
+      <div class="t">② 病历首页 · 病灶假设 + 用户确认</div>
+      <div class="d">AI 不替用户下结论：它只给出三个候选「病灶假设」，由用户自己点选确认哪一条更像自己。这一步是产品「诚实点」的界面落点。</div>
+      <div class="s">视觉要点：假设卡用编号 + 概率条｜用户点选后才解锁下一步｜数据来源条标注「内置示例 / 真实检索」</div>
+    </div>
+  </div>
+
+  <div class="shot">
+    <img src="素材/ui/02-分歧地图.png" alt="分歧地图">
+    <div class="cap">
+      <div class="t">③ 分歧地图 · 三档判定</div>
+      <div class="d">把真实知乎讨论按观点聚成几个阵营，标出「大家到底在哪儿吵不拢」，并给出「存在真实分歧」的判定。这张图是产品的核心差异化。</div>
+      <div class="s">视觉要点：簇用颜色区分｜分歧程度用红色标尺｜每条簇标注赞数与来源作者</div>
+    </div>
+  </div>
+
+  <div class="shot">
+    <img src="素材/ui/03-会诊结论书.png" alt="会诊结论书">
+    <div class="cap">
+      <div class="t">④ 会诊结论书 · 来源计数 + 少数意见</div>
+      <div class="d">每条结论都带「几位参与者达成一致」的来源计数；少数意见单独成块、用红色标出，不由 AI 抹平。结论书公开，行动清单私密。</div>
+      <div class="s">视觉要点：共识用绿点、分歧用红点｜每个论断后可溯源｜底部一键复制 Markdown 带回知乎</div>
+    </div>
+  </div>
+
+</div></body></html>

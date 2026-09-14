@@ -173,7 +173,7 @@ const ZHILIAO_AI = (() => {
             + (it.authority ? '　权威等级 ' + it.authority : '')
             + (it.excerpt ? '\n   摘要：' + String(it.excerpt).slice(0, 120) : '')
           ).join('\n')
-      : '【无真实检索】这次没有接入知乎开放平台，请基于你对该话题的普遍了解来模拟。';
+      : '【无真实检索】这次没有接入知乎开放平台，请基于你对该话题的普遍了解来作答。';
 
     const out = await json([
       { role: 'system', content: SYS },
@@ -185,7 +185,7 @@ const ZHILIAO_AI = (() => {
           + '输出 JSON：\n'
           + '{\n'
           + '  "topic": "会诊议题，一句话",\n'
-          + '  "corpus": 数字（模拟检索到的讨论篇数，800-3000）,\n'
+          + '  "corpus": 数字（检索到的讨论篇数，800-3000）,\n'
           + '  "current": "settled|dispute|insufficient",\n'
           + '  "conclusion": "一句判定结论，不带书名号",\n'
           + '  "disputes": [ {"name":"争议点，不超过 20 字","level":"hi|mid|lo",'

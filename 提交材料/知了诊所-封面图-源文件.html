@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width: 1920px; height: 1080px; overflow: hidden; position: relative;
+    font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background: linear-gradient(120deg, #e9f4ff 0%, #f3f9ff 42%, #fbfdff 70%, #ffffff 100%);
+    color: #0b2b4d;
+  }
+  .orb { position:absolute; border-radius:50%; filter: blur(80px); opacity:.55; }
+  .orb.a { width:640px; height:640px; background:#c7e4ff; left:-160px; top:-200px; }
+  .orb.b { width:520px; height:520px; background:#d8efff; right:-140px; bottom:-180px; opacity:.5; }
+  .orb.c { width:300px; height:300px; background:#bfe0ff; right:520px; top:80px; opacity:.4; }
+  .watermark {
+    position:absolute; left:-60px; bottom:-140px; z-index:0;
+    font-size:560px; font-weight:800; color:#0084ff; opacity:.045;
+    line-height:1; user-select:none; pointer-events:none;
+  }
+
+  .wrap { position:relative; z-index:1; display:flex; height:100%; align-items:center; padding:0 120px; gap:90px; }
+  .left { flex:1; min-width:0; }
+
+  .brand { display:flex; align-items:center; gap:16px; margin-bottom:58px; }
+  .brand img { width:64px; height:64px; border-radius:18px; box-shadow:0 6px 18px rgba(11,43,77,.18); }
+  .brand-name { font-size:30px; font-weight:700; letter-spacing:.5px; }
+  .brand-sub { font-size:17px; color:#5b748e; margin-top:2px; letter-spacing:1px; }
+
+  h1 { font-size:92px; font-weight:800; line-height:1.18; letter-spacing:1px; }
+  h1 .acc { color:#0084ff; }
+  .value { font-size:29px; color:#3f5a75; margin-top:30px; font-weight:500; line-height:1.6; max-width:760px; }
+
+  .journey { display:flex; align-items:center; gap:16px; margin-top:54px; }
+  .step {
+    display:flex; align-items:center; gap:12px;
+    background:#fff; border:1px solid #d9ecff; border-radius:15px;
+    padding:18px 28px; box-shadow:0 10px 22px -12px rgba(0,84,179,.4);
+  }
+  .step .ic { font-size:26px; }
+  .step .w { font-size:25px; font-weight:700; }
+  .arr { color:#9ccbf6; font-size:24px; font-weight:700; }
+
+  .feats { display:flex; gap:28px; margin-top:42px; }
+  .feat { font-size:20px; color:#5b748e; display:flex; align-items:center; gap:10px; }
+  .feat i { width:9px; height:9px; border-radius:50%; background:#0084ff; flex:0 0 auto; }
+
+  .badge { position:absolute; left:120px; bottom:58px; display:flex; align-items:center; gap:12px; font-size:19px; color:#5b748e; }
+  .badge .tag { background:#0084ff; color:#fff; font-size:17px; font-weight:600; padding:8px 15px; border-radius:9px; letter-spacing:.5px; }
+
+  .right { flex:0 0 630px; display:flex; align-items:center; justify-content:center; }
+  .hero {
+    position:relative; border-radius:40px; overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(11,43,77,.45);
+    transform: rotate(-2.5deg); border:10px solid #ffffff;
+  }
+  .hero img { display:block; width:630px; height:566px; object-fit:cover; }
+</style></head>
+<body>
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div class="watermark">知</div>
+  <div class="wrap">
+    <div class="left">
+      <div class="brand">
+        <img src="../assets/fox-avatar.png">
+        <div>
+          <div class="brand-name">知了诊所</div>
+          <div class="brand-sub">AI 问题会诊</div>
+        </div>
+      </div>
+      <h1>把拿不准的问题，<br>变成<span class="acc">拿得走</span>的答案。</h1>
+      <div class="value">不凭印象，先读真实的知乎讨论，再给出一份公开的《会诊结论书》和一份私密的《行动清单》。</div>
+
+      <div class="journey">
+        <div class="step"><span class="ic">💬</span><span class="w">聊</span></div>
+        <div class="arr">→</div>
+        <div class="step"><span class="ic">🔍</span><span class="w">查</span></div>
+        <div class="arr">→</div>
+        <div class="step"><span class="ic">🤝</span><span class="w">办</span></div>
+      </div>
+
+      <div class="feats">
+        <div class="feat"><i></i>读真实的知乎讨论</div>
+        <div class="feat"><i></i>结论带来源</div>
+        <div class="feat"><i></i>产出可以带走</div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="hero"><img src="../assets/fox-doctor-bg.jpg"></div>
+    </div>
+  </div>
+
+  <div class="badge"><span class="tag">知乎 AI 黑客松 2026</span><span>知识炼金场</span></div>
+</body></html>
