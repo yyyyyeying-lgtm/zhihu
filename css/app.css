@@ -1045,16 +1045,20 @@ input, textarea { font-family: inherit; }
 .ec-free-tag.is-free { background: #e6f8f0; color: #0a8a52; }
 .ec-free-tag.is-paid { background: #fff2e0; color: #b26a00; }
 
-/* 演示声明 */
+/* 内测状态条 —— 产品的正常状态，不是警告 */
 .ec-notice {
-  display: flex; gap: 10px; align-items: flex-start;
-  background: #fff8e6; border: 1px solid #ffe2a8; border-radius: var(--r-m);
-  padding: 12px 16px; font-size: 12.5px; color: #7a5a12; line-height: 1.7; margin-bottom: 22px;
+  background: linear-gradient(90deg, var(--blue-light), #f7fbff);
+  border: 1px solid var(--blue-border); border-radius: var(--r-m);
+  padding: 15px 18px; margin-bottom: 22px;
 }
-.ec-notice b {
-  flex: 0 0 auto; background: #ffb020; color: #fff;
-  font-size: 11.5px; padding: 2px 8px; border-radius: 5px; margin-top: 1px;
+.ec-status-top { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.ec-status-badge {
+  font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+  background: var(--blue); color: #fff; letter-spacing: .3px;
 }
+.ec-status-title { font-size: 14px; font-weight: 600; color: var(--t1); }
+.ec-status-desc { font-size: 12.5px; color: #3f6c96; line-height: 1.7; }
+.ec-off { color: #0a8a52; font-weight: 600; }
 
 /* 号别 + 分成 */
 .ec-grid { display: flex; gap: 16px; margin-bottom: 26px; }
@@ -1185,9 +1189,14 @@ input, textarea { font-family: inherit; }
   font-size: 12.5px; color: var(--t2);
 }
 .ec-ticket-split b { color: var(--t1); }
-.ec-ticket-warn {
-  margin-top: 14px; background: #fff8e6; border: 1px solid #ffe2a8; border-radius: var(--r-m);
-  padding: 12px 16px; font-size: 12.5px; color: #7a5a12; line-height: 1.75;
+.ec-ticket-note {
+  margin-top: 14px; background: #f4f8fc; border: 1px solid var(--blue-border);
+  border-radius: var(--r-m); padding: 12px 16px;
+  font-size: 12.5px; color: #3f6c96; line-height: 1.75;
+}
+.ec-bk-split {
+  font-size: 12px; color: var(--t3); line-height: 1.7;
+  margin-top: 9px; padding-top: 9px; border-top: 1px dashed var(--border-strong);
 }
 
 /* ---------- 窄屏 ---------- */

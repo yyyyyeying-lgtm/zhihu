@@ -1719,9 +1719,11 @@ function closeModal(id) { $("#" + id).classList.add("hidden"); }
    专家门诊（商业化主路径 · 方案 §11）
    -----------------------------------------------------------
    专家门诊 = 创作者声誉达标后开设的付费咨询，平台与创作者分成。
-   本轮是**功能原型**：接单、选时段、计价、分成、出号单的链路全部真跑，
-   但专家是演示画像、支付是演示支付 —— 界面上必须把这句话放在看得见的地方，
-   不能让任何人误以为产生了真实扣款或真实服务承诺。
+   接单、选时段、计价、分成、出号单这条链路全部真跑；当前处于**内测**：
+   挂号免费、号源为内测排班。界面上按真实产品的内测定价写法呈现
+   （标准价 → 内测优惠 → 应付 ¥0），
+   并明确写出「未产生费用 / 不涉及实际服务交付」——
+   付费入口不能让任何人误以为已经扣款。
    =========================================================== */
 const EC = () => D.expertClinic;
 const EC_ORDERS_KEY = "zhiliao_expert_orders";
@@ -1748,9 +1750,13 @@ function renderExpertClinic() {
         esc(x.tag) + '</span>' +
     '</div>').join("");
 
-  /* 演示声明 */
-  $("#ecNotice").innerHTML = '<b>演示环境</b><span>' +
-    esc(ec.notice.replace(/^演示环境\s*·\s*/, "")) + '</span>';
+  /* 内测状态条（产品的正常状态，不是免责声明） */
+  $("#ecNotice").innerHTML =
+    '<div class="ec-status-top">' +
+      '<span class="ec-status-badge">' + esc(ec.status.badge) + '</span>' +
+      '<span class="ec-status-title">' + esc(ec.status.title) + '</span>' +
+    '</div>' +
+    '<div class="ec-status-desc">' + esc(ec.status.desc) + '</div>';
 
   /* 号别 */
   $("#ecTiers").innerHTML =
@@ -1833,7 +1839,7 @@ function openBooking(id) {
   const tier = ec.tiers.find(t => t.id === d.tier) || ec.tiers[0];
   BKG = { doctor: d, tier: tier, slot: d.slots[0], paid: false, no: "" };
   $("#bkTitle").textContent = "挂 " + d.name + " 的号";
-  $("#bkFoot").textContent = ec.notice;
+  $("#bkFoot").textContent = "内测挂号 · 不收取费用";
   renderBooking();
   openModal("modalBooking");
 }
@@ -1845,21 +1851,24 @@ function renderBooking() {
   const platformCut = tier.price * s.platform / 100;
 
   if (BKG.paid) {
-    /* 已支付：出号单 */
+    /* 已挂号：出号单 */
     $("#bkBody").innerHTML =
       '<div class="ec-ticket">' +
         '<div class="ec-ticket-head">' +
           '<span class="ec-ticket-no">' + esc(BKG.no) + '</span>' +
-          '<span class="ec-ticket-badge">演示号单</span>' +
+          '<span class="ec-ticket-badge">内测号单</span>' +
         '</div>' +
         '<div class="ec-ticket-row"><span>专家</span><b>' + esc(d.name) + ' · ' + esc(d.title) + '</b></div>' +
-        '<div class="ec-ticket-row"><span>号别</span><b>' + esc(tier.name) + '　' + money(tier.price) + '</b></div>' +
+        '<div class="ec-ticket-row"><span>号别</span><b>' + esc(tier.name) + '　' + money(tier.price) +
+          ' <span class="ec-off">内测免费</span></b></div>' +
         '<div class="ec-ticket-row"><span>时段</span><b>' + esc(BKG.slot) + '</b></div>' +
         '<div class="ec-ticket-row"><span>困惑</span><b>' + esc(BKG.question || "（未填）") + '</b></div>' +
-        '<div class="ec-ticket-split">本次分成：创作者 <b>' + money(creatorCut) + '</b> ／ 平台 <b>' + money(platformCut) + '</b></div>' +
+        '<div class="ec-ticket-row"><span>应付</span><b>¥0</b></div>' +
+        '<div class="ec-ticket-split">按标准价结算时，本次分成：创作者 <b>' + money(creatorCut) +
+          '</b> ／ 平台 <b>' + money(platformCut) + '</b></div>' +
       '</div>' +
-      '<div class="ec-ticket-warn">这是<b>演示号单</b>：没有发生真实扣款，也没有真实专家接单。' +
-        '它的作用是让你看到「挂号 → 计价 → 分成 → 出号单」这条链路是怎么跑的。</div>';
+      '<div class="ec-ticket-note">内测挂号 · 本次未产生费用。号源与出诊时段为内测排班，' +
+        '暂不涉及实际服务交付。</div>';
     $("#btnPay").textContent = "完成";
     $("#btnPay").onclick = () => closeModal("modalBooking");
     $("#btnBkCancel").classList.add("hidden");
@@ -1888,11 +1897,12 @@ function renderBooking() {
     '<div class="ec-bk-label">费用明细</div>' +
     '<div class="ec-bill">' +
       '<div class="ec-bill-row"><span>' + esc(tier.name) + '</span><b>' + money(tier.price) + '</b></div>' +
-      '<div class="ec-bill-row sub"><span>其中：创作者所得（' + s.creator + '%）</span><b>' + money(creatorCut) + '</b></div>' +
-      '<div class="ec-bill-row sub"><span>其中：平台服务费（' + s.platform + '%）</span><b>' + money(platformCut) + '</b></div>' +
-      '<div class="ec-bill-row total"><span>应付</span><b>' + money(tier.price) + '</b></div>' +
+      '<div class="ec-bill-row sub"><span>内测优惠</span><b class="ec-off">−' + money(tier.price) + '</b></div>' +
+      '<div class="ec-bill-row total"><span>应付</span><b>¥0</b></div>' +
     '</div>' +
-    '<div class="ec-bk-note">' + esc(tier.desc) + '</div>';
+    '<div class="ec-bk-note">' + esc(tier.desc) + '　·　内测期间挂号免费。</div>' +
+    '<div class="ec-bk-split">按标准价结算时：创作者得 ' + money(creatorCut) +
+      '（' + s.creator + '%），平台服务费 ' + money(platformCut) + '（' + s.platform + '%）。</div>';
 
   $$("[data-slot]").forEach(b => {
     b.onclick = () => {
@@ -1900,7 +1910,7 @@ function renderBooking() {
       $$("[data-slot]").forEach(x => x.classList.toggle("on", x === b));
     };
   });
-  $("#btnPay").textContent = "确认挂号（演示支付 " + money(tier.price) + "）";
+  $("#btnPay").textContent = "确认挂号（内测免费）";
   $("#btnPay").onclick = payBooking;
 }
 

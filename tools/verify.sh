@@ -391,10 +391,10 @@ report("专家门诊 · 商业化（v1.12 新增）", [
     ("列出免费与付费的边界",       ec_list.count('ec-free-item') >= 3),
     ("边界里同时出现免费与付费",    'is-free' in ec_list and 'is-paid' in ec_list),
     ("写明 AI 会诊免费",          'AI 会诊' in ec_list),
-    # —— ★ 演示声明：付款类功能必须显著标注，不能被伪装成真实扣款 ——
-    ("显著标注演示环境",          'ec-notice' in ec_list),
-    ("明确写「不产生真实扣款」",    '不产生真实扣款' in ec_list),
-    ("明确写不构成真实服务承诺",    '不构成真实服务承诺' in ec_list),
+    # —— ★ 付费入口的诚实底线：内测口径，且必须写明不收费 / 不涉及实际交付 ——
+    ("标注内测状态",             'ec-status-badge' in ec_list and '内测中' in ec_list),
+    ("写明内测期间挂号免费",       '内测期间挂号免费' in ec_list),
+    ("讲清号源性质（内测排班）",    '内测排班' in ec_list),
     # —— 号别与定价 ——
     ("有两种号别",               ec_list.count('ec-tier') >= 2),
     ("号别带价格",               'ec-tier-price' in ec_list and '¥' in ec_list),
@@ -407,19 +407,23 @@ report("专家门诊 · 商业化（v1.12 新增）", [
     ("每位号源有声誉等级",         'ec-rep' in ec_list),
     ("每位号源有擅长方向",         'ec-doc-good' in ec_list),
     ("号源有可约时段与接单按钮",    'data-book' in ec_list),
-    # —— 挂号面板 ——
+    # —— 挂号面板：真实产品写法（标准价 → 内测优惠 → 应付 ¥0）——
     ("挂号面板能打开",            'id="modalBooking"' in ec_book),
     ("可选时段",                ec_book.count('data-slot') >= 2),
     ("费用明细逐项列出",          ec_book.count('ec-bill-row') >= 3),
-    ("明细里写明创作者所得",       '创作者所得' in ec_book),
-    ("明细里写明平台服务费",       '平台服务费' in ec_book),
-    ("按钮写明是演示支付",         '演示支付' in ec_book),
+    ("明细区分标准价与内测优惠",    '内测优惠' in ec_book),
+    ("应付显示为 ¥0",            '¥0' in ec_book),
+    ("按钮写明是内测免费",         '内测免费' in ec_book),
+    ("面板脚注写明不收费",         '不收取费用' in ec_book),
     # —— 号单 ——
-    ("演示支付后出号单",          'ec-ticket' in ec_ticket),
+    ("挂号后出号单",             'ec-ticket' in ec_ticket),
     ("号单编号可读",             'ec-ticket-no' in ec_ticket),
-    ("号单带「演示号单」标记",      '演示号单' in ec_ticket),
-    ("号单复述本次分成",          'ec-ticket-split' in ec_ticket),
-    ("号单再次声明未真实扣款",      '没有发生真实扣款' in ec_ticket),
+    ("号单标注内测",             '内测号单' in ec_ticket),
+    ("号单复述分成（商业模式可见）", 'ec-ticket-split' in ec_ticket),
+    # ★ 这两条是诚实底线：付费入口不能让任何人以为已经扣款 /
+    #   以为有真人会来交付。以后谁想删掉这两句话，验证会直接报错。
+    ("号单写明本次未产生费用",     '未产生费用' in ec_ticket),
+    ("号单写明不涉及实际服务交付",   '不涉及实际服务交付' in ec_ticket),
 ])
 
 report("现场演示能力（v1.3 新增）", [
